@@ -3,12 +3,13 @@ import nibabel as nib
 import numpy as np
 
 # Load the image
-image_P31 = nib.load("P31_image_path.nii")
-volume_P31 = image_P31.get_fdata()
+# image_P31 = nib.load("P31_image_path.nii")
+# volume_P31 = image_P31.get_fdata()
+volume_P31 = np.zeros((500,500,500))
 # Create a CCFT object
 # this can be done for either volumes or points
 # for volumes we would run the following
-CCFT_vol = CCFT.create_volume(
+CCFT_vol = CCFT.volume(
     data=volume_P31, space="CCFv3", voxel_size_um=20, age_PND=31
 )
 
