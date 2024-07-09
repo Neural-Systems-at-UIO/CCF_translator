@@ -3,4 +3,3 @@ class time_series:
         self.volumes = volumes
         self.data_ages = [i.age_PND for i in volumes]
         self.data_ages.sort()
-    

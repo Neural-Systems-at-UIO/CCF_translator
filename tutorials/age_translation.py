@@ -3,20 +3,18 @@ import nibabel as nib
 import numpy as np
 
 # Load the image
-# image_P31 = nib.load("P31_image_path.nii")
-# volume_P31 = image_P31.get_fdata()
-volume_P31 = np.zeros((500,500,500))
+image_P31 = nib.load("demo_data/DeMBA_P56_brain_mod.nii.gz")
+volume_P31 = image_P31.get_fdata()
 # Create a CCFT object
 # this can be done for either volumes or points
 # for volumes we would run the following
-CCFT_vol = CCFT.volume(
-    data=volume_P31, space="CCFv3", voxel_size_um=20, age_PND=31
-)
+CCFT_vol = CCFT.volume(data=volume_P31, space="CCFv3", voxel_size_um=20, age_PND=31)
+
 
 # alternatively for points we could do this
 with open("my_points.txt") as f:
     points = np.array(f.readlines())
-CCFT_pts = CCFT.create_pointset(points,space="CCFv3", voxel_size_um=20, age_PND=31)
+CCFT_pts = CCFT.create_pointset(points, space="CCFv3", voxel_size_um=20, age_PND=31)
 
 # we can then translate either the points or volumes into a new target age or space.
 # CCFT will try to find a path from the current space into the target one

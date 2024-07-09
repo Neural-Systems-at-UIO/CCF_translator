@@ -1,39 +1,39 @@
 {
     "file_name":[
-        "P4_to_P7.hdf5",
-        "P7_to_P4.hdf5",
-        "P7_to_P14.hdf5",
-        "P14_to_P7.hdf5",
-        "P14_to_P21.hdf5",
-        "P21_to_P14.hdf5",
-        "P21_to_P28.hdf5",
-        "P28_to_P21.hdf5",
-        "P28_to_P56.hdf5",
-        "P56_to_P28.hdf5"
+        "P4_to_P7.nii.gz",
+        "P7_to_P4.nii.gz",
+        "P7_to_P14.nii.gz",
+        "P14_to_P7.nii.gz",
+        "P14_to_P21.nii.gz",
+        "P21_to_P14.nii.gz",
+        "P21_to_P28.nii.gz",
+        "P28_to_P21.nii.gz",
+        "P28_to_P56.nii.gz",
+        "P56_to_P28.nii.gz"
     ],
     "source_space":[
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF"
+        "allen_mouse_CCF_P4",
+        "allen_mouse_CCF_P7",
+        "allen_mouse_CCF_P7",
+        "allen_mouse_CCF_P14",
+        "allen_mouse_CCF_P14",
+        "allen_mouse_CCF_P21",
+        "allen_mouse_CCF_P21",
+        "allen_mouse_CCF_P28",
+        "allen_mouse_CCF_P28",
+        "allen_mouse_CCF_P56"
     ],
     "target_space":[
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF",
-        "allen_mouse_CCF"
+        "allen_mouse_CCF_P7",
+        "allen_mouse_CCF_P4",
+        "allen_mouse_CCF_P14",
+        "allen_mouse_CCF_P7",
+        "allen_mouse_CCF_P21",
+        "allen_mouse_CCF_P14",
+        "allen_mouse_CCF_P28",
+        "allen_mouse_CCF_P21",
+        "allen_mouse_CCF_P56",
+        "allen_mouse_CCF_P28"
         ],
     "source_age_pnd":[
         4,
@@ -58,6 +58,19 @@
         21,
         56,
         28
+    ],
+    "translation_magnitude":[
+        3,
+        3,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        28,
+        28
+
     ],
     "transformation_resolution_micron":[
         20,
