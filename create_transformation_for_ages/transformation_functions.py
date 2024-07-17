@@ -13,7 +13,7 @@ def interpolate_array(arr):
     coords_to_interp = np.array(np.nonzero(np.isnan(arr))).T
     # Perform the interpolation
     interp = NearestNDInterpolator(coords_not_nan, values_not_nan)
-    interp_values = interp(coords_to_interp,k=1000, weights='distance')
+    interp_values = interp(coords_to_interp,k=500, weights='distance')
     # Assign the interpolated values to the NaN elements in the original array
     arr[np.isnan(arr)] = interp_values
     return arr
@@ -42,11 +42,11 @@ def find_edge_nans(arr):
 
 def forward_transform(volume, forward_deformation):
     forward_coords = create_deformation_coords(forward_deformation)
-    forward_coords = filter_out_of_bounds(forward_coords)
     forward_coords = np.round(forward_coords).astype(int)
+    forward_coords = filter_out_of_bounds(forward_coords)
     out_volume = np.zeros_like(volume)
     out_volume[:] = np.nan
-    out_volume[:,forward_coords[0], forward_coords[1], forward_coords[2]] = -forward_coords 
+    out_volume[:,forward_coords[0], forward_coords[1], forward_coords[2]] = volume
     # Assuming `img` is your image array
     mask = find_edge_nans(out_volume)
     out_volume[:,~mask] = interpolate_array(out_volume[:,~mask])

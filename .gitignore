@@ -1,6 +1,7 @@
 CCF_translator/metadata/deformation_fields
 demo_data
 create_transformation_for_ages/deformations_from_elastix
+create_transformation_for_ages/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 CCF_translator/__pycache__/
