@@ -3,8 +3,8 @@ import CCF_translator as CCFT
 import nibabel as nib
 import numpy as np
 import json
-import h5py
-import hdf5plugin
+#import h5py
+#import hdf5plugin
 import scipy
 import networkx as nx
 import matplotlib.pyplot as plt
