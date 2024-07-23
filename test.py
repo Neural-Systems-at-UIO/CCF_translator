@@ -18,9 +18,10 @@ CCFT_vol = CCF_translator.volume(
 
 CCFT_vol.transform_to_age(30)
 
-self = CCFT_vol
-key_age_arr = self.metadata[self.metadata['key_age']]['source_age_pnd'].values
-key_age_arr
+
+"""TODO 
+transform points
+"""
 """
 if you wanted to get the voxel size from the header you could do so like this
 voxel_size = img.header['pixdim']
