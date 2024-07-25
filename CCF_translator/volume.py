@@ -20,32 +20,32 @@ class volume:
         pass
 
     def transform_to_age(self, target):
-        source = self.age_PND
+        source = '_'.join(self.space, self.age_PND)
         array = self.values
         direction = np.sign(target - source)
         key_age_df = self.metadata[self.metadata['key_age']]
-        key_age_arr = key_age_df['source_age_pnd'].values
+        key_space_arr = key_age_df['source_space'].values
 
-        if source not in key_age_arr:
-            source_key = route_calculation.calculate_key_in_path(source, target, key_age_arr)
+        if source not in key_space_arr:
+            source_key = route_calculation.calculate_key_in_path(source, target, key_space_arr)
         else:
             source_key = source
-        if target not in key_age_arr:
-            target_key =  route_calculation.calculate_key_in_path(target, source, key_age_arr)
+        if target not in key_space_arr:
+            target_key =  route_calculation.calculate_key_in_path(target, source, key_space_arr)
         else:
             target_key = target
-        route = route_calculation.calculate_route(f'{self.space}_P{source_key}',f'{self.space}_P{target_key}',self.metadata[self.metadata['key_age']].to_dict('list'))
+        route = route_calculation.calculate_route(source_key,target_key,self.metadata[self.metadata['key_age']].to_dict('list'))
         route = [int(i.split('_P')[-1]) for i in route]
-        if source not in key_age_arr:
+        if source not in key_space_arr:
             route.insert(0,source)
-        if target not in key_age_arr:
+        if target not in key_space_arr:
             route.append(target)
         deform_arr = None
         for i in range(1,len(route)):
             start = route[i-1]
             stop  = route[i]
             magnitude = abs(stop-start)
-            if stop not in key_age_arr:
+            if stop not in key_space_arr:
                 deform_path = os.path.join(base_path, "metadata", "deformation_fields", self.space, f"{stop}_pull_{stop - 1}.nii.gz")
                 magnitude *= -1
             else:
