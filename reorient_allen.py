@@ -17,7 +17,7 @@ anno = np.pad(anno_orig, [[0,90],[0,0],[0,0]])
 
 
 
-anno = np.transpose(anno_orig, (2,1,0))
+anno = np.transpose(anno, (2,1,0))
 #out_im = nib.Nifti1Image(anno, target.affine, target.header)
 #nib.save(out_im,  r"/home/harryc/github/CCF_translator/demo_data/average_template_10_reoriented.nii.gz")
 #anno.shape
