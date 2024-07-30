@@ -6,6 +6,11 @@ import os
 
 base_path = os.path.dirname(__file__)
 
+def resize_transformation(deform_arr, array_size):
+    if (np.array(deform_arr.shape)[1:] != np.array(array_size)).all():
+        scale = (1, *(np.array(array_size) / np.array(deform_arr.shape)[1:]))
+        deform_arr = apply_deformation.resize_transform(deform_arr, scale)
+    return deform_arr
 
 def calculate_keys(source, target, key_age_arr):
     if source not in key_age_arr:
@@ -68,7 +73,6 @@ def combine_route(route, array, metadata):
                     deform_arr[i] -= temp_padding[i][0]
                     deform_arr[i] += temp_padding[i][1]
                 deform_padding = np.concatenate(([[0, 0]], temp_padding), axis=0)
-
                 deform_arr  = pad_neg(deform_arr, deform_padding, mode='constant')
         if translation_metadata['dim_order'][0] != '[0, 1, 2]':
             dim_order = list(map(int, translation_metadata['dim_order'][0][1:-1].split(', ')))
@@ -105,15 +109,12 @@ def combine_route(route, array, metadata):
                 deform_arr = apply_deformation.open_transformation(deform_path) * vector
             else:
                 deform_b = apply_deformation.open_transformation(deform_path) * vector
+                if (np.array(deform_b.shape) != np.array(deform_arr.shape)).all():
+                    deform_b = resize_transformation(deform_b, deform_arr.shape)
                 deform_arr = apply_deformation.combine_deformations(deform_arr, deform_b)
     return deform_arr,pad_sum, array
 
 
-def resize_transformation(deform_arr, array_size):
-    if (np.array(deform_arr.shape)[1:] != np.array(array_size)).all():
-        scale = (1, *(np.array(array_size) / np.array(deform_arr.shape)[1:]))
-        deform_arr = apply_deformation.resize_transform(deform_arr, scale)
-    return deform_arr
 
 
 class volume:
