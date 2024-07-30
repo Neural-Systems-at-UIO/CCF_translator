@@ -5,11 +5,11 @@ import volume
 
 def save_volume(CCFT_vol, save_path):
     vol_metadata = {"space":CCFT_vol.space,
-                    "age_PND":CCFT_vol.current_age,
+                    "age_PND":CCFT_vol.age_PND,
                     "segmentation_file":CCFT_vol.segmentation_file}
     affine = np.eye(4) 
     affine[:3,:3] *= CCFT_vol.voxel_size_um
-    image = nib.Nifti1Image(CCFT_vol.values, affine=np.eye(4))
+    image = nib.Nifti1Image(CCFT_vol.values, affine=affine)
     image.header["descrip"] = vol_metadata
     image.header.set_xyzt_units(3)
     nib.save(image, save_path)
