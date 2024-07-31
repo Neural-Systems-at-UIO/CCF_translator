@@ -1,6 +1,6 @@
 import numpy as np
-from CCF_translator.interpolation.NearestNDInterpolator import NearestNDInterpolator 
-from CCF_translator.deformation.apply_deformation import create_deformation_coords
+from .interpolation.NearestNDInterpolator import NearestNDInterpolator 
+from .apply_deformation import create_deformation_coords
 import nibabel as nib 
 from scipy.ndimage import binary_dilation, binary_erosion
 
@@ -55,35 +55,7 @@ def invert_deformation(deformation_arr_transpose):
     # Create a mask for NaNs that are at the edge for efficiency
     edge_mask = mask & ~binary_dilation(~mask)
     eroded_img = binary_erosion(edge_mask, structure=np.ones((3,3,3)))
-    #for i in range(3):
-    #    reversed_deform[i] = interpolate_volume(reversed_deform[i], mask = ~eroded_img)
+    for i in range(3):
+        reversed_deform[i] = interpolate_volume(reversed_deform[i], mask = ~eroded_img)
     return reversed_deform
 
-
-transform_volume = r"/home/harryc/github/CCF_translator/CCF_translator/metadata/deformation_fields/Demba/28_pull_29.nii.gz"
-img = nib.load(transform_volume)
-
-forward_arr = np.asanyarray(img.dataobj) * 28
-forward_arr = np.transpose(forward_arr, (3,0,1,2))
-#arr_invert = invert_transformation_volume(forward_arr)
-output = invert_deformation(forward_arr)
-print("finished inverting transform")
-output = np.transpose(output, (1,2,3,0))
-img = nib.Nifti1Image(output / 28, img.affine, img.header)
-
-
-nib.save(img, 'quick2.nii.gz')
-
-
-
-volume = np.zeros((10,10,10))
-volume[5] = 0
-shape = volume.shape
-# Create a grid of points in the volume
-grid = np.mgrid[0:shape[0], 0:shape[1], 0:shape[2]]
-points = grid.reshape((3, -1)).T
-# Flatten the volume
-values = volume.flatten()
-interpolator = NearestNDInterpolator(points[400:-400], values[400:-400])
-
-interpolator(points[:400], k=2)
