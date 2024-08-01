@@ -36,18 +36,22 @@ def resize_transform(arr, scale):
     # Original indices
     _, z_indices, y_indices, x_indices = np.indices(arr.shape)
     # New indices with double the resolution
-    x_new_indices = np.linspace(x_indices.min(), x_indices.max(), arr.shape[3] * scale)
-    y_new_indices = np.linspace(y_indices.min(), y_indices.max(), arr.shape[2] * scale)
-    z_new_indices = np.linspace(z_indices.min(), z_indices.max(), arr.shape[1] * scale)
+    x_new_indices = np.linspace(x_indices.min(), x_indices.max(),   int(arr.shape[3] * scale[3]))
+    y_new_indices = np.linspace(y_indices.min(), y_indices.max(),   int(arr.shape[2] * scale[2]))
+    z_new_indices = np.linspace(z_indices.min(), z_indices.max(),   int(arr.shape[1] * scale[1]))
     # Create a grid of new indices
     new_indices = np.meshgrid(z_new_indices, y_new_indices, x_new_indices,  indexing='ij')
     new_shape = np.array(arr.shape) 
-    new_shape[1:] *= scale
+    new_shape[1] = new_shape[1] * scale[1]
+    new_shape[2] = new_shape[2] * scale[2]
+    new_shape[3] = new_shape[3] * scale[3]
     new_array = np.zeros(new_shape)
     for i in range(3):
         # New array with double the resolution
         new_array[i] = map_coordinates(arr[i], new_indices, order=1)
-    new_array = new_array*scale
+    new_array[0] = new_array[0]*scale[1]
+    new_array[1] = new_array[1]*scale[2]
+    new_array[2] = new_array[2]*scale[3]
     return new_array
 
 def resize_transformation(deform_arr, array_size):
@@ -69,6 +73,7 @@ def pad_neg(array, padding, mode):
     return array
 
 def combine_route(route, array,base_path, metadata):
+    print('combining route')
     deform_arr = None
     pad_sum = np.zeros((3,2))
     source_metadata = (
@@ -99,9 +104,6 @@ def combine_route(route, array,base_path, metadata):
             pad_sum+=temp_padding
             #array = pad_neg(array, temp_padding, mode='constant')
             if deform_arr is not None:
-                for i in range(3):
-                    deform_arr[i] -= temp_padding[i][0]
-                    deform_arr[i] += temp_padding[i][1]
                 deform_padding = np.concatenate(([[0, 0]], temp_padding), axis=0)
                 deform_arr  = pad_neg(deform_arr, deform_padding, mode='constant')
         if translation_metadata['dim_order'][0] != '[0, 1, 2]':
@@ -142,5 +144,12 @@ def combine_route(route, array,base_path, metadata):
                 if (np.array(deform_b.shape) != np.array(deform_arr.shape)).all():
                     deform_b = resize_transformation(deform_b, deform_arr.shape)
                 deform_arr = combine_deformations(deform_arr, deform_b)
+    if deform_arr is None:
+        array = pad_neg(array, pad_sum, mode='constant')
+    else:
+        # this needs to be tested more as I have no volumes which pad an index changing axis
+        for i in range(3):
+            deform_arr[i] -= pad_sum[i][0]
+            # deform_arr[i] += pad_sum[i][1]
     return deform_arr,pad_sum, array
 

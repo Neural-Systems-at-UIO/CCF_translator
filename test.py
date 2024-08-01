@@ -26,16 +26,6 @@ import CCF_translator
 import nibabel as nib
 import numpy as np
 import networkx as nx
-def save_volume(CCFT_vol, save_path):
-    vol_metadata = {"space":CCFT_vol.space,
-                    "age_PND":CCFT_vol.age_PND,
-                    "segmentation_file":CCFT_vol.segmentation_file}
-    affine = np.eye(4) 
-    affine[:3,:3] *= CCFT_vol.voxel_size_um
-    image = nib.Nifti1Image(CCFT_vol.values, affine=affine)
-    image.header["descrip"] = vol_metadata
-    image.header.set_xyzt_units(3)
-    nib.save(image, save_path)
 
 image_path = r"demo_data/DeMBA_P28_brain.nii.gz"
 img = nib.load(image_path) 
@@ -54,7 +44,21 @@ CCFT_vol = CCF_translator.volume(
 CCFT_vol.transform(56, 'Allen_CCFv3')
 
 
-save_volume( CCFT_vol, 'Allen_CCFv3_testing_save.nii.gz')
+CCFT_vol.save( 'demo_data/Allen_CCFv3_testing_save.nii.gz')
+
+import matplotlib.pyplot as plt
+slice1 = 300
+slice2 = 300
+slice3 = 400
+plt.imshow(CCFT_vol.values[slice1,:,:])
+plt.show()
+plt.imshow(CCFT_vol.values[:,slice2,:])
+plt.show()
+plt.imshow(CCFT_vol.values[:,:,slice3])
+plt.show()
+
+
+
 """
 
 print('finished saving template')
