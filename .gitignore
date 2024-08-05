@@ -1,7 +1,7 @@
 CCF_translator/metadata/deformation_fields
 CCF_translator/metadata/deformation_fields_old
 
-
+demo_data
 create_transformation_for_ages/deformations_from_elastix
 create_transformation_for_ages/
 # Byte-compiled / optimized / DLL files

@@ -18,7 +18,7 @@ for end_age in range(start_age, 4-1,  -1):
     CCFT_vol = CCF_translator.volume(
         values = atlas.reference,
         space = 'allen_mouse',
-        voxel_size_um=voxel_size_micron,
+        voxel_size_micron=voxel_size_micron,
         segmentation_file=False,
         age_PND = start_age
     )
@@ -27,7 +27,7 @@ for end_age in range(start_age, 4-1,  -1):
     CCFT_vol = CCF_translator.volume(
         values = atlas.annotation,
         space = 'allen_mouse',
-        voxel_size_um=voxel_size_micron,
+        voxel_size_micron=voxel_size_micron,
         segmentation_file=False,
         age_PND = start_age
     )
@@ -35,3 +35,6 @@ for end_age in range(start_age, 4-1,  -1):
     CCFT_vol.save(rf"{save_path}/P{end_age}_annotation_{voxel_size_micron}um.nii.gz")
 
 
+"""
+The following code creates the intermediate datasets between the ages
+"""

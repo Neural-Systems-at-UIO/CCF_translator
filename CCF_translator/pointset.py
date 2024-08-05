@@ -5,10 +5,10 @@ base_path = os.path.dirname(__file__)
 
 
 class pointset:
-    def __init__(self, values, space, voxel_size_um, age_PND):
+    def __init__(self, values, space, voxel_size_micron, age_PND):
         self.values = values
         self.space = space
-        self.voxel_size_um = voxel_size_um
+        self.voxel_size_micron = voxel_size_micron
         self.age_PND = age_PND
         metadata_path = os.path.join(base_path, "metadata", "translation_metadata.csv")
         metadata = pd.read_csv(metadata_path)
@@ -24,7 +24,7 @@ class pointset:
         space_size_micron = self.metadata[self.metadata['source_space'] == self.space].iloc[0][[row_template.format('X'),
                                                                 row_template.format('Y'),
                                                                 row_template.format('Z')]].values
-        space_size_voxels = space_size_micron/self.voxel_size_um
+        space_size_voxels = space_size_micron/self.voxel_size_micron
         source = f"{self.space}_P{self.age_PND}"
         target = f"{target_space}_P{target_age}"
         route = route_calculation.calculate_route(target, source, self.metadata)

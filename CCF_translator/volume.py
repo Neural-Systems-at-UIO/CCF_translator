@@ -9,10 +9,10 @@ base_path = os.path.dirname(__file__)
 
 
 class volume:
-    def __init__(self, values, space, voxel_size_um, age_PND, segmentation_file=False):
+    def __init__(self, values, space, voxel_size_micron, age_PND, segmentation_file=False):
         self.values = values
         self.space = space
-        self.voxel_size_um = voxel_size_um
+        self.voxel_size_micron = voxel_size_micron
         self.age_PND = age_PND
         self.segmentation_file = segmentation_file
         metadata_path = os.path.join(base_path, "metadata", "translation_metadata.csv")
@@ -51,7 +51,7 @@ class volume:
             "segmentation_file": self.segmentation_file,
         }
         affine = np.eye(4)
-        affine[:3, :3] *= self.voxel_size_um
+        affine[:3, :3] *= self.voxel_size_micron
         image = nib.Nifti1Image(self.values, affine=affine)
         image.header["descrip"] = vol_metadata
         image.header.set_xyzt_units(3)

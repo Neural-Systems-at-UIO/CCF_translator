@@ -13,7 +13,7 @@ target_age= 32
 CCFT_vol = CCF_translator.volume(
     values = atlas.reference,
     space = 'allen_mouse',
-    voxel_size_um=voxel_size_micron,
+    voxel_size_micron=voxel_size_micron,
     segmentation_file=False,
     age_PND = source_age
 )
