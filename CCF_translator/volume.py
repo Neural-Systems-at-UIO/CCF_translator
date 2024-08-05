@@ -24,9 +24,13 @@ class volume:
         source = f"{self.space}_P{self.age_PND}"
         target = f"{target_space}_P{target_age}"
         route = route_calculation.calculate_route(source, target, self.metadata)
-        deform_arr, pad_sum, array = apply_deformation.combine_route(
-            route, array, base_path, self.metadata
+        deform_arr, pad_sum, flip_sum, dim_order_sum = apply_deformation.combine_route(
+            route, array.shape, base_path, self.metadata
         )
+        array = np.transpose(array, dim_order_sum)
+        for i in range(len(flip_sum)):
+            if flip_sum[i]:
+                array = np.flip(array, axis=i)
         if deform_arr is not None:
             new_shape = np.array(array.shape) + pad_sum[:,0] + pad_sum[:,1]
             deform_arr = apply_deformation.resize_transformation(
@@ -34,9 +38,11 @@ class volume:
             )
             order = 0 if self.segmentation_file else 1
             array = apply_deformation.apply_transform(array, deform_arr, order=order)
-
+        else:
+            array = apply_deformation.pad_neg(array, pad_sum, mode='constant')
         self.values = array
         self.age_PND = target_age
+        self.space = target_space
 
     def save(self, save_path):
         vol_metadata = {
@@ -52,5 +58,3 @@ class volume:
         nib.save(image, save_path)
 
 
-# First we should try to calculate the route using all volumes
-# Then we filter out the skippable ones

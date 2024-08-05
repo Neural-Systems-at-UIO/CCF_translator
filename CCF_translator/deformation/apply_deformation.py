@@ -72,10 +72,12 @@ def pad_neg(array, padding, mode):
     array = np.pad(array, padding, mode=mode)
     return array
 
-def combine_route(route, array,base_path, metadata):
+def combine_route(route, array_shape, base_path, metadata):
     print('combining route')
     deform_arr = None
     pad_sum = np.zeros((3,2))
+    flip_sum = [False, False, False]
+    dim_order_sum = np.array([0,1,2])
     source_metadata = (
         metadata["source_space"] + "_P" + metadata["source_age_pnd"].astype(str)
     )
@@ -97,19 +99,19 @@ def combine_route(route, array,base_path, metadata):
             X_physical_size_micron = translation_metadata['X_physical_size_micron']
             Y_physical_size_micron = translation_metadata['Y_physical_size_micron']
             Z_physical_size_micron = translation_metadata['Z_physical_size_micron']
-            x_pad = (padding[0] / X_physical_size_micron) * array.shape[0]
-            y_pad = (padding[1] / Y_physical_size_micron) * array.shape[1]
-            z_pad = (padding[2] / Z_physical_size_micron) * array.shape[2]
+            x_pad = (padding[0] / X_physical_size_micron) * array_shape[0]
+            y_pad = (padding[1] / Y_physical_size_micron) * array_shape[1]
+            z_pad = (padding[2] / Z_physical_size_micron) * array_shape[2]
             temp_padding = np.array([x_pad, y_pad, z_pad])
             pad_sum+=temp_padding
-            #array = pad_neg(array, temp_padding, mode='constant')
             if deform_arr is not None:
                 deform_padding = np.concatenate(([[0, 0]], temp_padding), axis=0)
                 deform_arr  = pad_neg(deform_arr, deform_padding, mode='constant')
         if translation_metadata['dim_order'][0] != '[0, 1, 2]':
             dim_order = list(map(int, translation_metadata['dim_order'][0][1:-1].split(', ')))
-            array = np.transpose(array, dim_order)
+            #array = np.transpose(array, dim_order)
             pad_sum = pad_sum[dim_order]
+            dim_order_sum = dim_order_sum[dim_order]
             if deform_arr is not None:
                 deform_dim = np.array(dim_order.copy())
                 deform_dim = deform_dim + 1
@@ -121,7 +123,8 @@ def combine_route(route, array,base_path, metadata):
             for i in range(3):
                 if dim_flip[i]:
                     pad_sum[i] = pad_sum[i][::-1]
-                    array = np.flip(array, axis=i)
+                    #array = np.flip(array, axis=i)
+                    flip_sum[i] = not flip_sum[i]
                     if deform_arr is not None:
                         deform_arr  = np.flip(deform_arr, axis=i+1)
                         deform_arr[i] *= -1
@@ -144,12 +147,11 @@ def combine_route(route, array,base_path, metadata):
                 if (np.array(deform_b.shape) != np.array(deform_arr.shape)).all():
                     deform_b = resize_transformation(deform_b, deform_arr.shape)
                 deform_arr = combine_deformations(deform_arr, deform_b)
-    if deform_arr is None:
-        array = pad_neg(array, pad_sum, mode='constant')
-    else:
+
+    if deform_arr is not None:
         # this needs to be tested more as I have no volumes which pad an index changing axis
         for i in range(3):
             deform_arr[i] -= pad_sum[i][0]
             # deform_arr[i] += pad_sum[i][1]
-    return deform_arr,pad_sum, array
+    return deform_arr, pad_sum, flip_sum, dim_order_sum
 
