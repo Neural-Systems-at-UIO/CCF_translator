@@ -74,6 +74,8 @@ def pad_neg(array, padding, mode):
 
 def download_deformation_field(url, path):
     print("Downloading file from " + url + " to " + path)
+    if not os.path.exists(os.path.dirname(path)):
+        os.makedirs(os.path.dirname(path))
     r = requests.get(url, allow_redirects=True)
     open(path, "wb").write(r.content)
 
