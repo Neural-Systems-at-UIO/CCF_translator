@@ -49,10 +49,31 @@ for m in ['iterative', 'individual']:
         h2d = []
         i2d = []
         d2a = []
+        hx = []
+        hy = []
+        hz = []
+        ix = []
+        iy = []
+        iz = []
+        dx = []
+        dy = []
+        dz = []
         new_mean_older_points = []
         for i in range(len(mean_older_points)):
             if np.isnan(mean_older_points[i]).any():
                 new_mean_older_points.append([np.nan, np.nan, np.nan])
+                i2h.append(np.nan)
+                h2d.append(np.nan)
+                i2d.append(np.nan)
+                hx.append(np.nan)
+                hy.append(np.nan)
+                hz.append(np.nan)
+                ix.append(np.nan)
+                iy.append(np.nan)
+                iz.append(np.nan)
+                dx.append(np.nan)
+                dy.append(np.nan)
+                dz.append(np.nan)
                 continue
             pred_point = points.values[i]
             new_mean_older_points.append(pred_point)
@@ -65,12 +86,30 @@ for m in ['iterative', 'individual']:
             i2h.append(h_i_dist)
             h2d.append(d_h_dist)
             i2d.append(d_i_dist)
+            hx.append(heidi_point[0])
+            hy.append(heidi_point[1])
+            hz.append(heidi_point[2])
+            ix.append(ingvild_point[0])
+            iy.append(ingvild_point[1])
+            iz.append(ingvild_point[2])
+            dx.append(pred_point[0])
+            dy.append(pred_point[1])
+            dz.append(pred_point[2])
             #d2a.append(d_a_dist)
         output_data = {'Acronym':points_dataset_h['Acronym'], 
-                    'Full Name':points_dataset_h['Full Name'],
+                    'Full Name':points_dataset_h['Full name'],
                     'Distance Ingvild to Heidi':i2h,
                         'Distance Ingvild to Demba':i2d,
-                        'Distance Heidi to Demba':h2d}
+                        'Distance Heidi to Demba':h2d,
+                        'Heidi x':hx,
+                        'Heidi y':hy,
+                        'Heidi z':hz,
+                        'Ingvild x':ix,
+                        'Ingvild y':iy,
+                        'Ingvild z':iz,
+                        'Demba x':dx,
+                        'Demba y':dy,
+                        'Demba z':dz}
         pd.DataFrame(output_data).to_csv(f"demo_data/{m}_{name_younger_age}.csv")
         mean_older_points = np.array(new_mean_older_points)
 

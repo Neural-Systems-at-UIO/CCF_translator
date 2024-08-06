@@ -19,10 +19,13 @@ class volume:
         metadata = pd.read_csv(metadata_path)
         self.metadata = metadata
 
-    def transform(self, target_age=None, target_space=None):
+    def transform(self, target_age, target_space):
         array = self.values
         source = f"{self.space}_P{self.age_PND}"
         target = f"{target_space}_P{target_age}"
+        if source == target:
+            print("volume is already in that space")
+            return
         route = route_calculation.calculate_route(source, target, self.metadata)
         deform_arr, pad_sum, flip_sum, dim_order_sum = apply_deformation.combine_route(
             route, array.shape, base_path, self.metadata

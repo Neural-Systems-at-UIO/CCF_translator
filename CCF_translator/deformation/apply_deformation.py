@@ -4,14 +4,14 @@ import scipy
 import json
 import os
 from scipy.ndimage import map_coordinates
-
+import requests
 
 def create_deformation_coords(deformation_arr):
     coords = np.mgrid[0:deformation_arr.shape[1], 0:deformation_arr.shape[2], 0:deformation_arr.shape[3]]
     deformed_coords = coords + deformation_arr
     return deformed_coords
 
-def open_transformation(transform_path):
+def open_transformation(transform_path):        
     deformation_img = nib.load(transform_path)
     deformation = np.asarray(deformation_img.dataobj)
     deformation =  np.transpose(deformation, (3,0,1,2))
@@ -71,6 +71,11 @@ def pad_neg(array, padding, mode):
             padding[i][1] = 0
     array = np.pad(array, padding, mode=mode)
     return array
+
+def download_deformation_field(url, path):
+    print("Downloading file from " + url + " to " + path)
+    r = requests.get(url, allow_redirects=True)
+    open(path, "wb").write(r.content)
 
 def combine_route(route, array_shape, base_path, metadata):
     print('combining route')
@@ -140,6 +145,9 @@ def combine_route(route, array_shape, base_path, metadata):
                 translation_metadata["source_space"][0],
                 translation_metadata["file_name"][0],
             )
+            if not os.path.exists(deform_path):
+                target_url =f"https://data-proxy.ebrains.eu/api/v1/buckets/common-coordinate-framework-translator/deformation_fields/{translation_metadata['source_space'][0]}/{translation_metadata['file_name'][0]}"
+                download_deformation_field(target_url, deform_path)
             if deform_arr is None:
                 deform_arr = open_transformation(deform_path) * vector
             else:

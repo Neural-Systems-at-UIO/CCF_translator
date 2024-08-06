@@ -1,6 +1,7 @@
 from .deformation import apply_deformation, route_calculation
 import pandas as pd
 import os
+import numpy as np
 base_path = os.path.dirname(__file__)
 
 
@@ -39,7 +40,14 @@ class pointset:
         for i in range(3):
             values[:,i] = values[:,i] +  pad_sum[i][0]
         if deform_arr is not None:
-            values = values + deform_arr[:,values[:,0].astype(int),values[:,1].astype(int),values[:,2].astype(int) ].T
+            # Create a mask of rows in 'values' that contain NaN
+            nan_mask = np.isnan(values).any(axis=1)
+
+            # Only perform the operation on rows that do not contain NaN
+            values[~nan_mask] = values[~nan_mask] + deform_arr[:,values[~nan_mask,0].astype(int),values[~nan_mask,1].astype(int),values[~nan_mask,2].astype(int)].T
+
+            # For rows that contain NaN, set the entire row to NaN
+            values[nan_mask] = np.nan
         self.values = values
         self.age_PND = target_age
         self.space = target_space
