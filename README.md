@@ -8,6 +8,11 @@ CCF_translator can be installed by running
 ```
 pip install CCF-translator
 ```
+## Currently supported spaces
+| Framework Name | name in api | supported age range
+| -------------- | ----------- | ----------- 
+| Allen mouse CCFv3 | allen_mouse | 56
+| Demba developmental mouse | demba_dev_mouse| 4-56
 ## Usage
 **Transforming points**
 
@@ -51,4 +56,4 @@ CCFT_vol.transform(target_age, 'demba_dev_mouse')
 CCFT_vol.save(rf"demo_data/P{target_age}_template_{voxel_size_micron}um.nii.gz")
 ```
 ## Contributing
-If you would like to add a new space or connect an existing one, please create a deformation matrix between this space and an existing one, and then open a Issue in this repository. 
+If you would like to add a new space or connect an existing one, please create a deformation matrix and or describe the required reorientation/flipping/cropping/padding of axis between this space and one that already exists in the network, and then open a Issue in this repository.  Ideally choose a space which covers all the areas which are covered in your space. While the Allen CCFv3 is very popular it is missing the anterior olfactory bulb and the caudal portion of the cerebellum and brain stem so is not the optimal choice. 
