@@ -1,9 +1,14 @@
 # CCF_translator
 A tool for translating between common coordinate frameworks using deformation matrices. 
-A longstanding problem in NeuroInformatics has been the inability to easily translate data between common coordinate frameworks. CCF_translator aims to solve this. By connecting each new space to an existing one, we can construct a graph of deformations. This means that as long as their is a route from one space to another, even if that is via multiple other spaces, you can translate your data. Now, when new templates for new modalities, strains, or ages are released, they will not subdivide users into unrelated spaces. As long as they are connected to a space which exists in our network they will be fully connected to all other spaces.  
+A longstanding problem in NeuroInformatics has been the inability to easily translate data between common coordinate frameworks. CCF_translator aims to solve this. By connecting each new space to an existing one, we can construct a graph of deformations. This means that as long as there is a route from one space to another, even if that is via multiple other spaces, you can translate your data. Now, when new templates for new modalities, strains, or ages are released, they will not subdivide users into unrelated spaces. As long as they are connected to a space which exists in our network they will be fully connected to all other spaces.  
 
 CCF_translator can also interpolate between spaces and create a new intermediate space. This is primarily useful for development, where you can take the midpoint between day 5 and day 7 and use this as a post natal day 6 reference. It could also be useful for making references of disease progression.  
-## Examples
+## Installation
+CCF_translator can be installed by running 
+```
+pip install CCF-translator
+```
+## Usage
 **Transforming points**
 
 To take a coordinate in one volume and find the equivalent coordinate in a second volume is quite simple in CCF_translator. 
@@ -45,3 +50,5 @@ CCFT_vol = CCF_translator.volume(
 CCFT_vol.transform(target_age, 'demba_dev_mouse')
 CCFT_vol.save(rf"demo_data/P{target_age}_template_{voxel_size_micron}um.nii.gz")
 ```
+## Contributing
+If you would like to add a new space or connect an existing one, please create a deformation matrix between this space and an existing one, and then open a Issue in this repository. 
