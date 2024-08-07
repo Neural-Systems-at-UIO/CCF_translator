@@ -1,8 +1,8 @@
 # CCF_translator
 A tool for translating between common coordinate frameworks using deformation matrices. 
-A longstanding problem in NeuroInformatics has been the inability to easily translate data between common coordinate frameworks. CCF_translator aims to solve this. By connecting each new space to an existing one, we can construct a graph of deformations. This means that as long as there is a route from one space to another, even if that is via multiple other spaces, you can translate your data. Now, when new templates for new modalities, strains, or ages are released, they will not subdivide users into unrelated spaces. As long as they are connected to a space which exists in our network they will be fully connected to all other spaces.  
+A longstanding problem in NeuroInformatics has been the inability to easily translate data between common coordinate frameworks. CCF_translator aims to solve this. By connecting each new space to an existing one, we can construct a graph of deformations. This means that data can be translated as long as there is a route from one space to another, even if that route passes through multiple other spaces. Now, when new templates for new modalities, strains, or ages are released, users will not be subdivided into unrelated spaces. As long as they are connected to a space which exists in our network, they will be fully connected to all other spaces.  
 
-CCF_translator can also interpolate between spaces and create a new intermediate space. This is primarily useful for development, where you can take the midpoint between day 5 and day 7 and use this as a post natal day 6 reference. It could also be useful for making references of disease progression.  
+CCF_translator can also interpolate between spaces and create a new intermediate space. This is primarily useful for development, where the midpoint between day 5 and day 7 can be taken and used as a postnatal day 6 reference. It could also be useful for making references of disease progression.  
 ## Installation
 CCF_translator can be installed by running 
 ```
@@ -56,4 +56,4 @@ CCFT_vol.transform(target_age, 'demba_dev_mouse')
 CCFT_vol.save(rf"demo_data/P{target_age}_template_{voxel_size_micron}um.nii.gz")
 ```
 ## Contributing
-If you would like to add a new space or connect an existing one, please create a deformation matrix and or describe the required reorientation/flipping/cropping/padding of axis between this space and one that already exists in the network, and then open a Issue in this repository.  Ideally choose a space which covers all the areas which are covered in your space. While the Allen CCFv3 is very popular it is missing the anterior olfactory bulb and the caudal portion of the cerebellum and brain stem so is not the optimal choice. 
+If you would like to add a new space or connect an existing one, please create a deformation matrix and/or describe the required reorientation, flipping, cropping, and padding of the axis between this space and one that already exists in the network, and then open an issue in this repository.  Ideally, choose a space which covers all the areas which are covered in your space. While the Allen CCFv3 is very popular, it is missing the anterior olfactory bulb and the caudal portion of the cerebellum and brain stem, so it is not the optimal choice. 
