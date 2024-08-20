@@ -3,7 +3,8 @@ import math
 import pandas as pd
 import numpy as np
 from CCF_translator.deformation.forward_transform import invert_deformation
-
+import os
+root_path = r"/home/harryc/github/gubra/Multimodal_mouse_brain_atlas_files"
 metadata = pd.read_csv(r"/home/harryc/github/CCF_translator/CCF_translator/metadata/translation_metadata.csv")
 voxel_size_micron = 25
 
@@ -35,8 +36,8 @@ def save_volume(volume, file_name):
 source_spaces = ["gubra_mouse_mri", "gubra_mouse_lsfm"]
 target_spaces = ["allen_mouse", "allen_mouse"]
 
-original_elastix_volume_paths = [rf"/home/harryc/github/gubra/mri_2_ccfv3_zero_origin_same_size.nii.gz",
-                    rf"/home/harryc/github/gubra/mri_2_ccfv3_zero_origin_same_size.nii.gz"]
+original_elastix_volume_paths = [f'{root_path}/LSFM_space_oriented/lsfm_2_ccfv3_zero_origin.nii.gz',
+                    f'{root_path}/MRI_space_oriented/mri_2_ccfv3_zero_origin.nii.gz']
 
 
 
@@ -55,4 +56,67 @@ for i in range(len(original_elastix_volume_paths)):
     if not os.path.isdir(save_path):
         os.mkdir(save_path)
     save_volume(inverted_arr,f"{save_path}/{source}_pull_{target}.nii.gz")
+
+
+metadata_template = {'file_name':[], 'source_space':[], 'target_space':[], 'affine':[], 'dim_order':[],
+       'key_age':[], 'source_age_pnd':[], 'target_age_pnd':[], 'source_key_age':[],
+       'target_key_age':[], 'padding_micron':[], 'transformation_resolution_micron':[],
+       'X_physical_size_micron':[], 'Y_physical_size_micron':[],
+       'Z_physical_size_micron':[], 'dim_flip':[], 'vector':[]}
+
+for i in range(len(original_elastix_volume_paths)):
+    original_elastix_volume_path = original_elastix_volume_paths[i]
+    source = source_spaces[i]
+    target = target_spaces[i]
+    metadata_template['file_name'].append(f"{target}_pull_{source}.nii.gz")
+    metadata_template['source_space'] = source
+    metadata_template['target_space'] = target
+    metadata_template['affine'].append(np.eye(4))
+    metadata_template['dim_order'].append([0,1,2])
+    metadata_template['key_age'].append(True)
+    metadata_template['source_age_pnd'].append(56)
+    metadata_template['target_age_pnd'].append(56)
+    metadata_template['source_key_age'].append(False)
+    metadata_template['target_key_age'].append(False)
+    if target == "perens_stpt_mouse":
+        metadata_template['X_physical_size_micron'].append(11400)
+        metadata_template['Y_physical_size_micron'].append(16700)
+        metadata_template['Z_physical_size_micron'].append(8000)
+        metadata_template['transformation_resolution_micron'].append(25)
+    if target == "perens_lsfm_mouse":
+        metadata_template['X_physical_size_micron'].append(9225)
+        metadata_template['Y_physical_size_micron'].append(12800)
+        metadata_template['Z_physical_size_micron'].append(6700)
+        metadata_template['transformation_resolution_micron'].append([25])
+    if target == "perens_mri_mouse":
+        metadata_template['X_physical_size_micron'].append(11375)
+        metadata_template['Y_physical_size_micron'].append(15375)
+        metadata_template['Z_physical_size_micron'].append(7425)
+        metadata_template['transformation_resolution_micron'].append([25])
+
+
+    metadata_template['dim_flip'].append([False,False,False])
+    metadata_template['vector'].append(1)
+    metadata_template['padding_micron'].append((0,0,0))
+
+    metadata_template['file_name'].append(f"{source}_pull_{target}.nii.gz")
+    metadata_template['source_space'] = target
+    metadata_template['target_space'] = source
+    metadata_template['affine'].append(np.eye(4))
+    metadata_template['dim_order'].append([0,1,2])
+    metadata_template['key_age'].append(True)
+    metadata_template['source_age_pnd'].append(56)
+    metadata_template['target_age_pnd'].append(56)
+    metadata_template['source_key_age'].append(False)
+    metadata_template['target_key_age'].append(False)
+    metadata_template['X_physical_size_micron'].append(56)
+    metadata_template['Y_physical_size_micron'].append(56)
+    metadata_template['Z_physical_size_micron'].append(56)
+    metadata_template['dim_flip'].append([False,False,False])
+    metadata_template['vector'].append(1)
+    metadata_template['padding_micron'].append((0,0,0))
+
+pd.DataFrame(metadata_template)
+metadata.to_csv(metadata_path)
+
 
