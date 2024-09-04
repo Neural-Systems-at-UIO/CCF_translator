@@ -13,6 +13,9 @@ pip install CCF-translator
 | -------------- | ----------- | ----------- 
 | Allen mouse CCFv3 | allen_mouse | 56
 | Demba developmental mouse | demba_dev_mouse| 4-56
+| Gubra lightsheet mouse | perens_lsfm_mouse| 56
+| Gubra MRI mouse | perens_mri_mouse| 56
+| Gubra STPT mouse | perens_stpt_mouse| 56
 ## Usage
 **Transforming points**
 
