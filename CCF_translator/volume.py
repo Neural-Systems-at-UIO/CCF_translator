@@ -57,9 +57,7 @@ class volume:
                     deform_arr = apply_deformation.resize_input(
                         deform_arr, (1,*original_input_shape), (1,*new_input_shape)
                     )
-            order = 0 if self.segmentation_file else 1
-            print(f"applying transform of size {deform_arr.shape} to array of shape {array.shape}")
-            
+            order = 0 if self.segmentation_file else 1            
             array = apply_deformation.apply_transform(array, deform_arr, order=order)
         else:
             array = apply_deformation.pad_neg(array, pad_sum, mode='constant')
