@@ -3,6 +3,8 @@ A tool for translating between common coordinate frameworks using deformation ma
 A longstanding problem in NeuroInformatics has been the inability to easily translate data between common coordinate frameworks. CCF_translator aims to solve this. By connecting each new space to an existing one, we can construct a graph of deformations. This means that data can be translated as long as there is a route from one space to another, even if that route passes through multiple other spaces. Now, when new templates for new modalities, strains, or ages are released, users will not be subdivided into unrelated spaces. As long as they are connected to a space which exists in our network, they will be fully connected to all other spaces.  
 
 CCF_translator can also interpolate between spaces and create a new intermediate space. This is primarily useful for development, where, for instance, the midpoint between day 5 and day 7 can be taken and used as a postnatal day 6 reference. It could also be useful for making references of disease progression.  
+
+![a graph of all the available spaces and how they are connected. the spaces are nodes with the space name written on top of them, the edges show which spaces are connected to which other spaces.](/graph.png)
 ## Installation
 CCF_translator can be installed by running 
 ```
