@@ -82,6 +82,21 @@ out_path = r"/home/harryc/github/CCF_translator/CCF_translator/"
 
 ##set the origin as zero in the transform file if you want to use that with these files
 ##here we just remove the offsets from the volume that is to be registered
+img = nib.load(f"{root_path}/MRI_space_oriented/mri_temp.nii.gz")
+img.header['qoffset_x'] = 0
+img.header['qoffset_y'] = 0
+img.header['qoffset_z'] = 0
+source_arr = np.asanyarray(img.dataobj)
+img.affine[0,3] = 0
+img.affine[1,3] = 0
+img.affine[2,3] = 0
+out_im = nib.Nifti1Image(source_arr, img.affine, img.header)
+nib.save(out_im, f'{root_path}/MRI_space_oriented/mri_new_header.nii.gz')
+
+
+
+##set the origin as zero in the transform file if you want to use that with these files
+##here we just remove the offsets from the volume that is to be registered
 img = nib.load(f"{root_path}/AIBS_CCFv3_space_oriented/ccfv3_temp.nii.gz")
 img.header['qoffset_x'] = 0
 img.header['qoffset_y'] = 0
@@ -92,6 +107,7 @@ img.affine[1,3] = 0
 img.affine[2,3] = 0
 out_im = nib.Nifti1Image(source_arr, img.affine, img.header)
 nib.save(out_im, f'{root_path}/AIBS_CCFv3_space_oriented/ccfv3_new_header.nii.gz')
+
 
 ##here we correct the deformation matrix so it has an origin of zero
 img = nib.load(f"{root_path}/Deformation_fields/ccfv3_2_mri_deffield.nii.gz")
@@ -194,14 +210,14 @@ img.affine[1,-1] = 0
 img.affine[2,-1] = 0
 arr = np.squeeze(arr,3)
 arr = np.transpose(arr, [3,0,1,2])
-arr = resize_input(arr, (1,*source_arr.shape), arr.shape)
-t_mask = np.ones(arr[0].shape).astype(bool)
-print('mri nan percent')
-print(np.sum(mask) / np.sum(t_mask))
-arr = resize_input(arr, arr.shape, (1,*source_arr.shape))
+# arr = resize_input(arr, (1,*source_arr.shape), arr.shape)
+# t_mask = np.ones(arr[0].shape).astype(bool)
+# print('mri nan percent')
+# print(np.sum(mask) / np.sum(t_mask))
+# arr = resize_input(arr, arr.shape, (1,*source_arr.shape))
 arr = np.transpose(arr, [1,2,3,0])
 out_im = nib.Nifti1Image(arr, img.affine, img.header)
-save_path = f'{out_path}/metadata/deformation_fields/allen_mouse/'
+save_path = f'{out_path}/metadata/deformation_fields/perens_mri_mouse/'
 if not os.path.exists(save_path):
     os.makedirs(save_path)
 nib.save(out_im, f"{save_path}/perens_mri_mouse_pull_allen_mouse.nii.gz")

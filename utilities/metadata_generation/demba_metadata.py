@@ -11,7 +11,7 @@ space_name = "demba_dev_mouse"
 
 import nibabel as nib
 
-img = nib.load(r"demo_data/demba_dev_mouse_P56_double.nii.gz")
+img = nib.load(r"/home/harryc/github/CCF_translator/demo_data/DeMBA_P56_double.nii.gz")
 demba_dev_mouse_size_micron = np.array(img.shape) * 20 
 img, header = nrrd.read(r"demo_data/annotation_10.nrrd")
 allen_size_micron = np.array(img.shape) * 10
@@ -49,6 +49,9 @@ metadata_template = {
     "X_physical_size_micron":[],
     "Y_physical_size_micron":[],
     "Z_physical_size_micron":[],
+    "target_X_physical_size_micron":[],
+    "target_Y_physical_size_micron":[],
+    "target_Z_physical_size_micron":[],
     "dim_flip": [],
     "vector": [],
 }
@@ -71,6 +74,9 @@ def update_metadata(
     X_physical_size_micron,
     Y_physical_size_micron,
     Z_physical_size_micron,
+    target_X_physical_size_micron,
+    target_Y_physical_size_micron,
+    target_Z_physical_size_micron,
     dim_flip,
     metadata_template,
     
@@ -90,6 +96,9 @@ def update_metadata(
     metadata_template["X_physical_size_micron"].append(X_physical_size_micron)
     metadata_template["Y_physical_size_micron"].append(Y_physical_size_micron)
     metadata_template["Z_physical_size_micron"].append(Z_physical_size_micron)
+    metadata_template["target_X_physical_size_micron"].append(target_X_physical_size_micron)
+    metadata_template["target_Y_physical_size_micron"].append(target_Y_physical_size_micron)
+    metadata_template["target_Z_physical_size_micron"].append(target_Z_physical_size_micron)
     metadata_template["dim_flip"].append(dim_flip)
     metadata_template["vector"].append(vector)
     return metadata_template
@@ -111,7 +120,9 @@ for age in range(4, 57):
                                                         source_key_age=age, target_key_age=target_key, padding_micron=padding_micron, 
                                                         vector=vector,transformation_resolution_micron = 20,dim_flip=dim_flip,
                                                        X_physical_size_micron=demba_dev_mouse_size_micron[0],Y_physical_size_micron=demba_dev_mouse_size_micron[1],
-                                                       Z_physical_size_micron=demba_dev_mouse_size_micron[2], metadata_template = metadata_template)
+                                                       Z_physical_size_micron=demba_dev_mouse_size_micron[2],target_X_physical_size_micron=demba_dev_mouse_size_micron[0],
+                                                       target_Y_physical_size_micron=demba_dev_mouse_size_micron[1], target_Z_physical_size_micron=demba_dev_mouse_size_micron[2], 
+                                                       metadata_template = metadata_template)
             update_count+=1
     if age in key_ages[:-1]:
         target_key = np.min(key_ages[key_ages > age])
@@ -127,7 +138,10 @@ for age in range(4, 57):
                                                         key_age = key_age,source_age_pnd=age, target_age_pnd=target_age,
                                                         source_key_age=age, target_key_age=target_key, padding_micron=padding_micron,  vector=vector,
                                                         transformation_resolution_micron=20,X_physical_size_micron=demba_dev_mouse_size_micron[0],dim_flip=dim_flip,
-                                                        Y_physical_size_micron=demba_dev_mouse_size_micron[1],Z_physical_size_micron=demba_dev_mouse_size_micron[2], metadata_template = metadata_template)
+                                                        Y_physical_size_micron=demba_dev_mouse_size_micron[1],Z_physical_size_micron=demba_dev_mouse_size_micron[2],
+                                                        target_X_physical_size_micron=demba_dev_mouse_size_micron[0], target_Y_physical_size_micron=demba_dev_mouse_size_micron[1], 
+                                                        target_Z_physical_size_micron=demba_dev_mouse_size_micron[2], 
+                                                        metadata_template = metadata_template)
             update_count+=1
 
     if not key_age:
@@ -146,7 +160,9 @@ for age in range(4, 57):
                                                         source_key_age=source_key, target_key_age=target_key,  padding_micron=padding_micron, vector=vector, 
                                                         transformation_resolution_micron=20,dim_flip=dim_flip,
                                                         X_physical_size_micron=demba_dev_mouse_size_micron[0],Y_physical_size_micron=demba_dev_mouse_size_micron[1],
-                                                        Z_physical_size_micron=demba_dev_mouse_size_micron[2], metadata_template = metadata_template)
+                                                        Z_physical_size_micron=demba_dev_mouse_size_micron[2], target_X_physical_size_micron=demba_dev_mouse_size_micron[0],
+                                                       target_Y_physical_size_micron=demba_dev_mouse_size_micron[1], target_Z_physical_size_micron=demba_dev_mouse_size_micron[2],  
+                                                       metadata_template = metadata_template)
             update_count+=1
 
 """
@@ -181,7 +197,9 @@ metadata_template = update_metadata(    file_name = False,
                                         source_key_age=False, target_key_age=False, vector=False,
                                         transformation_resolution_micron=False,padding_micron=padding_micron.tolist(),
                                         X_physical_size_micron=allen_size_micron[0],Y_physical_size_micron=allen_size_micron[1],
-                                        Z_physical_size_micron=allen_size_micron[2],dim_flip=dim_flip, metadata_template = metadata_template)
+                                        Z_physical_size_micron=allen_size_micron[2],target_X_physical_size_micron=demba_dev_mouse_size_micron[0],
+                                        target_Y_physical_size_micron=demba_dev_mouse_size_micron[1], target_Z_physical_size_micron=demba_dev_mouse_size_micron[2], 
+                                        dim_flip=dim_flip, metadata_template = metadata_template)
 def invert_dim_order(order):
     inverse = [0] * len(order)
     for i, o in enumerate(order):
@@ -199,56 +217,9 @@ metadata_template = update_metadata(    file_name = False,
                                         transformation_resolution_micron=False, padding_micron=padding_micron.tolist(),
                                         X_physical_size_micron=demba_dev_mouse_size_micron[0],
                                         Y_physical_size_micron=demba_dev_mouse_size_micron[1],Z_physical_size_micron=demba_dev_mouse_size_micron[2],
+                                        target_X_physical_size_micron=demba_dev_mouse_size_micron[0],target_Y_physical_size_micron=demba_dev_mouse_size_micron[1], 
+                                        target_Z_physical_size_micron=demba_dev_mouse_size_micron[2], 
                                         dim_flip=dim_flip, metadata_template = metadata_template)
 
 
 pd.DataFrame(metadata_template).to_csv('/home/harryc/github/CCF_translator/CCF_translator/metadata/translation_metadata.csv', index=False)
-
-"""
-metadata.iloc[10]
-
-
-calculate_route('demba_dev_mouse_P56', 'demba_dev_mouse_P14', metadata)
-
-
-new_metadata = []
-for i,m in metadata[:].iterrows():
-    if not m['target_key']:
-        source_key = False
-        magnitude_to_source = 0
-    else:
-        source_key = route_calculation.calculate_key_in_path(int(m['target_age_pnd']),int(m['source_age_pnd']),metadata[metadata['key_age']]['source_age_pnd'].values)
-        magnitude_to_source = (source_key - m['source_age_pnd'])
-
-
-    m['source_key'] = source_key           
-    m['magnitude_to_source_key'] = magnitude_to_source      
-    new_metadata.append(m)
-                                      
-metadata = pd.DataFrame(new_metadata)
-new_metadata = []
-
-for i,m in metadata[:].iterrows():
-    if not m['target_key']:
-        target_key = False
-        magnitude_to_target = 0
-    else:
-        target_key = route_calculation.calculate_key_in_path(int(m['source_age_pnd']),int(m['target_age_pnd']),metadata[metadata['key_age']]['source_age_pnd'].values)
-        magnitude_to_target = (target_key - m['source_age_pnd'])
-
-
-    m['target_key'] = target_key           
-    m['magnitude_to_target_key'] = magnitude_to_source    
-    new_metadata.append(m)
-                              
-metadata = pd.DataFrame(new_metadata)
-                 
-metadata.loc[metadata['target_key_space'].str.contains('demba_dev_mouse', na=False), 'target_key_space'] = 'demba_dev_mouse'
-#metadata.loc[metadata['source_key_space'].str.contains('demba_dev_mouse', na=False), 'source_key_space'] = 'demba_dev_mouse'
-metadata.loc[metadata['target_space'].str.contains('demba_dev_mouse', na=False), 'target_space'] = 'demba_dev_mouse'
-metadata.loc[metadata['source_space'].str.contains('demba_dev_mouse', na=False), 'source_space'] = 'demba_dev_mouse'
-metadata.loc[metadata['target_key_space'].str.contains('Allen_CCF', na=False), 'target_key_space'] = 'Allen_CCF'
-#metadata.loc[metadata['source_key_space'].str.contains('Allen_CCF', na=False), 'source_key_space'] = 'Allen_CCF'
-metadata.loc[metadata['target_space'].str.contains('Allen_CCF', na=False), 'target_space'] = 'Allen_CCF'
-metadata.loc[metadata['source_space'].str.contains('Allen_CCF', na=False), 'source_space'] = 'Allen_CCF'
-"""
