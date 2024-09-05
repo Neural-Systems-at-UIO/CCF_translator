@@ -80,4 +80,3 @@ for i in range(len(target_spaces)):
 metadata = pd.read_csv(metadata_path)
 append_metadata = pd.DataFrame(metadata_template)
 pd.concat([metadata, append_metadata]).to_csv(metadata_path, index=False)
-

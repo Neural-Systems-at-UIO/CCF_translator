@@ -2,6 +2,7 @@ from scipy.interpolate.interpnd import NDInterpolatorBase, _ndim_coords_from_arr
 from scipy.spatial import cKDTree
 import numpy as np
 
+
 class NearestNDInterpolator(NDInterpolatorBase):
     """NearestNDInterpolator(x, y).
 
@@ -72,10 +73,10 @@ class NearestNDInterpolator(NDInterpolatorBase):
     >>> plt.axis("equal")
     >>> plt.show()
 
-    If we want to have a smoother interpolation which is still easy to 
+    If we want to have a smoother interpolation which is still easy to
     compute, we can specify a k value in the query along with a weights
     argument:
-    
+
     >>> Z = interp(X, Y, k=4, weights='distance')
     >>> plt.pcolormesh(X, Y, Z, shading='auto')
     >>> plt.plot(x, y, "ok", label="input point")
@@ -86,15 +87,15 @@ class NearestNDInterpolator(NDInterpolatorBase):
     """
 
     def __init__(self, x, y, rescale=False, tree_options=None):
-        NDInterpolatorBase.__init__(self, x, y, rescale=rescale,
-                                    need_contiguous=False,
-                                    need_values=False)
+        NDInterpolatorBase.__init__(
+            self, x, y, rescale=rescale, need_contiguous=False, need_values=False
+        )
         if tree_options is None:
             tree_options = dict()
         self.tree = cKDTree(self.points, **tree_options)
         self.values = np.asarray(y)
 
-    def __call__(self, *args, weights='uniform', **query_options):
+    def __call__(self, *args, weights="uniform", **query_options):
         """
         Evaluate interpolator at given points.
 
@@ -104,10 +105,10 @@ class NearestNDInterpolator(NDInterpolatorBase):
             Points where to interpolate data at.
             x1, x2, ... xn can be array-like of float with broadcastable shape.
             or x1 can be array-like of float with shape ``(..., ndim)``
-        weights : {'uniform', 'distance'}, optional method of averaging the k nearest 
-            neighbors. uniform means all k returned points are weighted equally, 
-            whereas distance weights points by the inverse of their distance. If 
-            k is set to 1 (as is the default), this parameter will have 
+        weights : {'uniform', 'distance'}, optional method of averaging the k nearest
+            neighbors. uniform means all k returned points are weighted equally,
+            whereas distance weights points by the inverse of their distance. If
+            k is set to 1 (as is the default), this parameter will have
             no effect.
         **query_options
             This allows ``k``, ``eps``, ``p``, ``distance_upper_bound``, and ``workers``
@@ -118,7 +119,7 @@ class NearestNDInterpolator(NDInterpolatorBase):
 
         """
         # For the sake of enabling subclassing, NDInterpolatorBase._set_xi performs
-        # some operations which are not required by NearestNDInterpolator.__call__, 
+        # some operations which are not required by NearestNDInterpolator.__call__,
         # hence here we operate on xi directly, without calling a parent class function.
         xi = _ndim_coords_from_arrays(args, ndim=self.points.shape[1])
         xi = self._check_call_shape(xi)
@@ -161,14 +162,18 @@ class NearestNDInterpolator(NDInterpolatorBase):
             interp_values[valid_mask] = self.values[i[valid_mask], ...]
         else:
             valid_mask = valid_mask.all(axis=1)
-            if weights == 'uniform' and dist.ndim > 1:
+            if weights == "uniform" and dist.ndim > 1:
                 interp_values = np.average(self.values[i], axis=1)
-            elif weights == 'distance' and dist.ndim > 1:
+            elif weights == "distance" and dist.ndim > 1:
                 power = 2
-                interp_values = np.average(self.values[i], axis=1, weights=( 1.0 / (dist ** power) ))
+                interp_values = np.average(
+                    self.values[i], axis=1, weights=(1.0 / (dist**power))
+                )
             else:
-                raise ValueError("Unknown value %r passed for weights,"
-                                "must be either 'uniform' or 'distance'" % (weights))
+                raise ValueError(
+                    "Unknown value %r passed for weights,"
+                    "must be either 'uniform' or 'distance'" % (weights)
+                )
             interp_values[~valid_mask] = np.nan
 
         if self.values.ndim > 1:
