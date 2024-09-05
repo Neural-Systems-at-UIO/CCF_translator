@@ -18,7 +18,7 @@ pip install CCF-translator
 | Gubra lightsheet mouse | perens_lsfm_mouse| 56
 | Gubra MRI mouse | perens_mri_mouse| 56
 | Gubra STPT mouse | perens_stpt_mouse| 56
-| Princeton lighsheet mouse | pccrinceton_mouse| 56
+| Princeton lighsheet mouse | princeton_mouse| 56
 ## Usage
 **Transforming points**
 
