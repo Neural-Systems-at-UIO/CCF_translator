@@ -17,7 +17,7 @@ So the transform should be in the shape of the output
 """
 
 
-class volume:
+class Volume:
     def __init__(
         self, values, space, voxel_size_micron, age_PND, segmentation_file=False
     ):

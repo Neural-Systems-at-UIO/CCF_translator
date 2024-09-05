@@ -6,7 +6,7 @@ import numpy as np
 base_path = os.path.dirname(__file__)
 
 
-class pointset:
+class Pointset:
     def __init__(self, values, space, voxel_size_micron, age_PND):
         self.values = values
         self.space = space
@@ -38,7 +38,7 @@ class pointset:
         source = f"{self.space}_P{self.age_PND}"
         target = f"{target_space}_P{target_age}"
         route = route_calculation.calculate_route(target, source, self.metadata)
-        deform_arr, pad_sum, flip_sum, dim_order_sum = apply_deformation.combine_route(
+        deform_arr, pad_sum, flip_sum, dim_order_sum, final_voxel_size = apply_deformation.combine_route(
             route, space_size_voxels, base_path, self.metadata
         )
         values = values[:, dim_order_sum]

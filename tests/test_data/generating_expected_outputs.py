@@ -55,7 +55,7 @@ volume = CCF_translator.volume(
 )
 volume.transform(
     target_space='demba_dev_mouse',
-    target_age=56
+    target_age=5
 )
 
 reference_transformed = volume.values
