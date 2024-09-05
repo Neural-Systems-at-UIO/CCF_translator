@@ -55,7 +55,7 @@ for i in range(len(target_spaces)):
     metadata_template["target_age_pnd"].append(56)
     metadata_template["source_key_age"].append(False)
     metadata_template["target_key_age"].append(False)
-    metadata_template["transformation_resolution_micron"].append(25)
+    metadata_template["transformation_resolution_micron"].append(20)
     if target == "princeton_mouse":
         metadata_template["target_X_physical_size_micron"].append(7040)
         metadata_template["target_Y_physical_size_micron"].append(12800)

@@ -6,8 +6,10 @@ import math
 import pandas as pd
 import numpy as np
 from CCF_translator.deformation.forward_transform import invert_deformation
-from CCF_translator.deformation.apply_deformation import resize_input
+from CCF_translator.deformation.apply_deformation import resize_input, apply_transform
 import os
+import matplotlib.pyplot as plt
+
 root_path = r"/home/harryc/github/gubra/princeton/"
 
 voxel_size_micron = 20
@@ -17,11 +19,12 @@ def open_deformation_field(deformation):
     and returns it in the format expected by CCF_translator"""
     deformation_arr = np.asanyarray(deformation.dataobj)
     def_header_dict = dict(deformation.header)
-    x_sign = math.copysign(1,def_header_dict['qoffset_x'])
-    y_sign = math.copysign(1,def_header_dict['qoffset_y'])
-    z_sign = math.copysign(1,def_header_dict['qoffset_z'])
+    # x_sign = math.copysign(1,def_header_dict['qoffset_x'])
+    # y_sign = math.copysign(1,def_header_dict['qoffset_y'])
+    # z_sign = math.copysign(1,def_header_dict['qoffset_z'])
     dim_scale = 1/def_header_dict['pixdim'][1:4]
-    dim_scale = np.array([x_sign,y_sign,z_sign]) * dim_scale
+    #fopr some reason in this volume we have to ignore q offset
+    # dim_scale = np.array([x_sign,y_sign,z_sign]) * dim_scale
     deformation_arr_scaled = np.squeeze(deformation_arr,3)
     deformation_arr_scaled = np.transpose(deformation_arr_scaled,(3,0,1,2))
     dim_scale_reshaped = dim_scale.reshape(-1, 1, 1, 1)
@@ -43,8 +46,10 @@ target_spaces = ["allen_mouse"]
 original_elastix_volume_paths = [f'{root_path}/output_directory/deformationField.nii.gz']
 
 #its a bit weird transforming from 25µm to 20µm so here i make it 20µm to 20µm
-current_input_size = np.array([320, 538, 456])
+current_input_size = np.array([320, 528, 456])
 new_input_size = current_input_size * (25 / 20)
+
+
 
 for i in range(len(original_elastix_volume_paths)):
     original_elastix_volume_path = original_elastix_volume_paths[i]
@@ -62,7 +67,5 @@ for i in range(len(original_elastix_volume_paths)):
     if not os.path.isdir(save_path):
         os.mkdir(save_path)
     save_volume(inverted_arr,f"{save_path}/{target}_pull_{source}.nii.gz")
-
-
 
 
