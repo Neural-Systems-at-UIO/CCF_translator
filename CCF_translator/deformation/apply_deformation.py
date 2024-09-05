@@ -143,18 +143,17 @@ def handle_padding(deform_arr, temp_padding, original_voxel_size):
     z_pad = padding[2] / original_voxel_size
     temp_padding = np.array([x_pad, y_pad, z_pad])
     deform_padding = np.concatenate(([[0, 0]], temp_padding), axis=0)
-    original_shape = deform_arr.shape
-    deform_arr = pad_neg(deform_arr, deform_padding, mode="constant")
-    for i in range(len(temp_padding)):
-        deform_arr[i] += temp_padding[i][0]
-    new_shape = deform_arr.shape
-    deform_arr = resize_input(deform_arr, original_shape, new_shape)
+    if deform_arr is not None:
+        original_shape = deform_arr.shape
+        deform_arr = pad_neg(deform_arr, deform_padding, mode="constant")
+        for i in range(len(temp_padding)):
+            deform_arr[i] += temp_padding[i][0]
+        new_shape = deform_arr.shape
+        deform_arr = resize_input(deform_arr, original_shape, new_shape)
     return deform_arr, temp_padding
 
 
-def handle_dim_order(
-    deform_arr, dim_order, target_shape, pad_sum, temp_padding, dim_order_sum
-):
+def handle_dim_order(deform_arr, dim_order, target_shape, pad_sum, temp_padding, dim_order_sum):
     dim_order = list(map(int, dim_order[1:-1].split(", ")))
     pad_sum = pad_sum[dim_order]
     if temp_padding is not None:

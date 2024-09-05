@@ -30,7 +30,7 @@ class volume:
         metadata = pd.read_csv(metadata_path)
         self.metadata = metadata
 
-    def transform(self, target_age, target_space, rescale_output=True):
+    def transform(self, target_age, target_space):
         array = self.values
         source = f"{self.space}_P{self.age_PND}"
         target = f"{target_space}_P{target_age}"
@@ -56,15 +56,10 @@ class volume:
                 new_input_shape = np.array(array.shape) * (
                     final_voxel_size / self.voxel_size_micron
                 )
-                if rescale_output:
-                    deform_arr = apply_deformation.resize_transform(
-                        deform_arr,
-                        (1, *([final_voxel_size / self.voxel_size_micron] * 3)),
-                    )
-                else:
-                    deform_arr = apply_deformation.resize_input(
-                        deform_arr, (1, *original_input_shape), (1, *new_input_shape)
-                    )
+                deform_arr = apply_deformation.resize_transform(
+                    deform_arr,
+                    (1, *([final_voxel_size / self.voxel_size_micron] * 3)),
+                )
             order = 0 if self.segmentation_file else 1
             array = apply_deformation.apply_transform(array, deform_arr, order=order)
         else:
