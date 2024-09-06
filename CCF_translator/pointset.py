@@ -8,7 +8,7 @@ base_path = os.path.dirname(__file__)
 
 class Pointset:
     def __init__(self, values, space, voxel_size_micron, age_PND):
-        self.values = values
+        self.values = np.array(values).astype(float)
         self.space = space
         self.voxel_size_micron = voxel_size_micron
         self.age_PND = age_PND
@@ -23,8 +23,15 @@ class Pointset:
         source = f"{self.space}_P{self.age_PND}"
         target = f"{target_space}_P{target_age}"
         row_template = "{}_physical_size_micron"
+        source = f"{self.space}_P{self.age_PND}"
+        target = f"{target_space}_P{target_age}"
+        route = route_calculation.calculate_route(target, source, self.metadata)
+        deform_arr, pad_sum, flip_sum, dim_order_sum, final_voxel_size = apply_deformation.combine_route(
+            route, self.voxel_size_micron, base_path, self.metadata
+        )
+        previous = '_'.join(route[-2].split('_')[:-1])
         space_size_micron = (
-            self.metadata[self.metadata["source_space"] == self.space]
+            self.metadata[(self.metadata["source_space"] == self.space) & (self.metadata["target_space"] == previous)]
             .iloc[0][
                 [
                     row_template.format("X"),
@@ -34,21 +41,11 @@ class Pointset:
             ]
             .values
         )
+
         space_size_voxels = space_size_micron / self.voxel_size_micron
-        source = f"{self.space}_P{self.age_PND}"
-        target = f"{target_space}_P{target_age}"
-        route = route_calculation.calculate_route(target, source, self.metadata)
-        deform_arr, pad_sum, flip_sum, dim_order_sum, final_voxel_size = apply_deformation.combine_route(
-            route, space_size_voxels, base_path, self.metadata
-        )
-        values = values[:, dim_order_sum]
-        space_size_reorder = space_size_voxels[dim_order_sum]
-        for i in range(len(flip_sum)):
-            if flip_sum[i]:
-                values[:, i] = space_size_reorder[i] - values[:, i]
-        for i in range(3):
-            values[:, i] = values[:, i] + pad_sum[i][0]
         if deform_arr is not None:
+            if final_voxel_size != self.voxel_size_micron:
+                values = values * (self.voxel_size_micron / final_voxel_size)
             # Create a mask of rows in 'values' that contain NaN
             nan_mask = np.isnan(values).any(axis=1)
 
@@ -65,6 +62,18 @@ class Pointset:
 
             # For rows that contain NaN, set the entire row to NaN
             values[nan_mask] = np.nan
+            if final_voxel_size != self.voxel_size_micron:
+                values = values * (final_voxel_size / self.voxel_size_micron)
+        for i in range(3):
+            values[:, i] = values[:, i] + pad_sum[i][0]
+
+        dim_order_sum = apply_deformation.invert_dim_order(dim_order_sum)
+        for i in range(len(flip_sum)):
+            if flip_sum[i]:
+                values[:, i] = space_size_voxels[i] - values[:, i]
+        values = values[:, dim_order_sum]
+
+
         self.values = values
         self.age_PND = target_age
         self.space = target_space

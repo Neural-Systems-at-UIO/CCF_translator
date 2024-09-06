@@ -6,6 +6,11 @@ import os
 from scipy.ndimage import map_coordinates
 import requests
 
+def invert_dim_order(order):
+    inverse = [0] * len(order)
+    for i, o in enumerate(order):
+        inverse[o] = i
+    return inverse
 
 def create_deformation_coords(deformation_arr):
     coords = np.mgrid[
