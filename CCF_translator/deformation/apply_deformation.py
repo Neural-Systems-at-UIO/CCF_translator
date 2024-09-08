@@ -104,7 +104,8 @@ def download_deformation_field(url, path):
     if not os.path.exists(os.path.dirname(path)):
         os.makedirs(os.path.dirname(path))
     r = requests.get(url, allow_redirects=True)
-    open(path, "wb").write(r.content)
+    with open(path, "wb") as file:
+        file.write(r.content)
 
 
 def calculate_offset(original_input_shape, output_shape):
