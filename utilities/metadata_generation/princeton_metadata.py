@@ -55,7 +55,7 @@ for i in range(len(target_spaces)):
     metadata_template["target_age_pnd"].append(56)
     metadata_template["source_key_age"].append(False)
     metadata_template["target_key_age"].append(False)
-    metadata_template["transformation_resolution_micron"].append(20)
+    
     if target == "princeton_mouse":
         metadata_template["target_X_physical_size_micron"].append(7040)
         metadata_template["target_Y_physical_size_micron"].append(12800)
@@ -66,10 +66,13 @@ for i in range(len(target_spaces)):
         metadata_template["target_Z_physical_size_micron"].append(11400)
 
     if source == "princeton_mouse":
+        metadata_template["transformation_resolution_micron"].append(20)
+
         metadata_template["X_physical_size_micron"].append(7040)
         metadata_template["Y_physical_size_micron"].append(12800)
         metadata_template["Z_physical_size_micron"].append(10800)
     if source == "allen_mouse":
+        metadata_template["transformation_resolution_micron"].append(20)
         metadata_template["X_physical_size_micron"].append(8000)
         metadata_template["Y_physical_size_micron"].append(13200)
         metadata_template["Z_physical_size_micron"].append(11400)

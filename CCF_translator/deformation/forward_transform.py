@@ -42,17 +42,18 @@ def invert_transformation_volume(forward_arr):
     ]
     return output
 
-
-def invert_deformation(deformation_arr_transpose):
+def invert_deformation(deformation_arr_transpose, output_shape = None):
+    if output_shape is None:
+        output_shape = deformation_arr_transpose.shape[1:]
     deformed_coords = create_deformation_coords(deformation_arr_transpose)
     new_coords = np.round(deformed_coords).astype(int)
-    new_coords[0][new_coords[0] >= new_coords.shape[1]] = new_coords.shape[1] - 1
-    new_coords[1][new_coords[1] >= new_coords.shape[2]] = new_coords.shape[2] - 1
-    new_coords[2][new_coords[2] >= new_coords.shape[3]] = new_coords.shape[3] - 1
+    new_coords[0][new_coords[0] >= output_shape[0]] = output_shape[0] - 1
+    new_coords[1][new_coords[1] >= output_shape[1]] = output_shape[1] - 1
+    new_coords[2][new_coords[2] >= output_shape[2]] = output_shape[2] - 1
     new_coords[0][new_coords[0] < 0] = 0
     new_coords[1][new_coords[1] < 0] = 0
     new_coords[2][new_coords[2] < 0] = 0
-    reversed_deform = np.zeros_like(deformation_arr_transpose)
+    reversed_deform = np.zeros((3, *output_shape))
     reversed_deform[:] = np.nan
     reversed_deform[:, new_coords[0], new_coords[1], new_coords[2]] = (
         -deformation_arr_transpose

@@ -83,4 +83,3 @@ arr = np.transpose(arr, (3, 0, 1, 2))
 arr = arr.transpose([0,2,1,3])
 arr = arr[[1,0,2]]
 save_volume(arr, r"/home/harryc/github/CCF_translator/CCF_translator/metadata/deformation_fields/princeton_mouse/princeton_mouse_pull_allen_mouse.nii.gz")
-
