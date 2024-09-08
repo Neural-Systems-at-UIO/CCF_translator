@@ -1,50 +1,42 @@
-import os 
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
-
+import unittest
 import numpy as np
-import CCF_translator
-scale = 2.5
-# points = np.array([(908, 342, 287)]) / scale
-points = np.array([(1195, 268, 575)]) / scale
-# points = np.array([(1320, 800, 1140)]) / scale
-# points -= 1
-target = 'perens_stpt_mouse'
-pset = CCF_translator.Pointset(points, 'allen_mouse', voxel_size_micron=25, age_PND=56)
-pset.transform(target_age=56, target_space=target)
-print(f"{target}: new points are {pset.values * scale}")
-print(f"correct values: ", (573.75518267, 1374.99169102,  482.20078192))
+import json
+import os
+from CCF_translator import Pointset
 
+class TestPointset(unittest.TestCase):
+    def setUp(self):
+        self.test_case_dir = os.path.join(os.path.dirname(__file__), 'pointset_test_cases')
 
+    def load_test_case(self, filename):
+        with open(os.path.join(self.test_case_dir, filename), 'r') as file:
+            return json.load(file)
 
-target = 'demba_dev_mouse'
-pset = CCF_translator.Pointset(points, 'allen_mouse', voxel_size_micron=25, age_PND=56)
-pset.transform(target_age=56, target_space=target)
-print(f"{target}: new points are {pset.values * scale}")
-print(f"correct values: ", (575.,  268., 1195.))
+    def run_test_case(self, test_case_filename):
+        test_case = self.load_test_case(test_case_filename)
+        points = np.array(test_case['points']) / test_case['scale']
+        target = test_case['target']
+        expected_values = np.array(test_case['expected_values'])
 
+        pset = Pointset(points, 'allen_mouse', voxel_size_micron=25, age_PND=56)
+        pset.transform(target_age=test_case['target_age'], target_space=target)
 
-target = 'perens_lsfm_mouse'
-pset = CCF_translator.Pointset(points, 'allen_mouse', voxel_size_micron=25, age_PND=56)
-pset.transform(target_age=56, target_space=target)
-print(f"{target}: new points are {pset.values * scale}")
-print(f"correct values: ", (464.81906322, 1116.69941131,  398.63036235))
+        np.testing.assert_array_almost_equal(pset.values * test_case['scale'], expected_values)
 
+# List of test case filenames
+test_case_files = [
+    'perens_stpt_mouse.json',
+    'demba_dev_mouse_56.json',
+    'perens_lsfm_mouse.json',
+    'perens_mri_mouse.json',
+    'demba_dev_mouse_32.json',
+]
 
-target = 'perens_mri_mouse'
-pset = CCF_translator.Pointset(points, 'allen_mouse', voxel_size_micron=25, age_PND=56)
-pset.transform(target_age=56, target_space=target)
-print(f"{target}: new points are {pset.values * scale}")
+# Dynamically create test methods for each test case file
+for test_case_file in test_case_files:
+    def test_method(self, test_case_file=test_case_file):
+        self.run_test_case(test_case_file)
+    setattr(TestPointset, f'test_{test_case_file.split(".")[0]}', test_method)
 
-
-target = 'demba_dev_mouse'
-pset = CCF_translator.Pointset(points, 'allen_mouse', voxel_size_micron=25, age_PND=56)
-pset.transform(target_age=32, target_space=target)
-print(f"{target}: new points are {pset.values * scale}")
-
-print(r"correct result is 566, 1374, 483")
-# [138.72000122 419.95246887 200.84948206]
-# pset = CCF_translator.Pointset(points, 'perens_lsfm_mouse', voxel_size_micron=20, age_PND=56)
-# pset.transform(target_age=56, target_space='allen_mouse')
-# print(f"new points are {pset.values}")
-
+if __name__ == '__main__':
+    unittest.main()

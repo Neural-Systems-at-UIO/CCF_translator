@@ -18,7 +18,6 @@ CCFT_vol = CCF_translator.Volume(
     segmentation_file=False,
     age_PND=source_age,
 )
-CCFT_vol.transform(target_age, "allen_mouse")
-CCFT_vol.save(rf"demo_data/allen_mouse_from_allen.nii.gz")
-
+CCFT_vol.transform(target_age, "perens_mri_mouse")
+CCFT_vol.save(rf"demo_data/perens_mri_from_allen.nii.gz")
 # CCFT_vol.save(rf"demo_data/P{target_age}_template_{voxel_size_micron}um.nii.gz")
