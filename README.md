@@ -13,6 +13,7 @@ CCF_translator can be installed by running
 pip install CCF-translator
 ```
 ## Currently supported spaces
+the name in CCF_translator aims to copy the name of atlases in the brainglobe_atlasapi when possible. 
 | Framework Name | name in api | supported age range
 | -------------- | ----------- | ----------- 
 | Allen mouse CCFv3 | allen_mouse | 56
