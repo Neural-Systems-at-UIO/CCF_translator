@@ -53,7 +53,7 @@ original_elastix_volume_paths = [
 # its a bit weird transforming from 25µm to 20µm so here i make it 20µm to 20µm
 current_input_size = np.array([320, 528, 456])
 new_input_size = current_input_size * (25 / 20)
-
+new_input_size = np.round(new_input_size).astype(int)
 
 for i in range(len(original_elastix_volume_paths)):
     original_elastix_volume_path = original_elastix_volume_paths[i]
@@ -61,25 +61,31 @@ for i in range(len(original_elastix_volume_paths)):
     target = target_spaces[i]
     elastix_img = nib.load(original_elastix_volume_path)
     elastix_arr = open_deformation_field(elastix_img).astype(np.float32)
+    copy_arr = elastix_arr.copy()
     elastix_arr = resize_input(
-        elastix_arr, (1, *current_input_size), (1, *new_input_size)
+        elastix_arr, (1, *current_input_size), elastix_arr.shape
+    )
+
+    elastix_arr = elastix_arr[:,:,:,::-1]
+    elastix_arr[2] *= -1
+    elastix_arr = resize_input(
+        elastix_arr, elastix_arr.shape, (1, *new_input_size)
     )
     elastix_arr = np.transpose(elastix_arr, [0,2,1,3])
     elastix_arr = elastix_arr[[1,0,2]]
+
     save_path = f"/home/harryc/github/CCF_translator/CCF_translator/metadata/deformation_fields/{source}/"
     if not os.path.isdir(save_path):
         os.mkdir(save_path)
     save_volume(elastix_arr, f"{save_path}/{source}_pull_{target}.nii.gz")
-    inverted_arr = invert_deformation(elastix_arr)
+    copy_arr = resize_input(
+        copy_arr, (1, *current_input_size), (1, *new_input_size)
+    )
+    copy_arr = np.transpose(copy_arr, [0,2,1,3])
+    copy_arr = copy_arr[[1,0,2]]
+    inverted_arr = invert_deformation(copy_arr, new_input_size[[1,0,2]])
     save_path = f"/home/harryc/github/CCF_translator/CCF_translator/metadata/deformation_fields/{target}/"
     if not os.path.isdir(save_path):
         os.mkdir(save_path)
     save_volume(inverted_arr, f"{save_path}/{target}_pull_{source}.nii.gz")
 
-import nibabel as nib
-img = nib.load(r"/home/harryc/github/CCF_translator/CCF_translator/metadata/deformation_fields/princeton_mouse/princeton_mouse_pull_allen_mouse.nii.gz")
-arr = img.get_fdata()
-arr = np.transpose(arr, (3, 0, 1, 2))
-arr = arr.transpose([0,2,1,3])
-arr = arr[[1,0,2]]
-save_volume(arr, r"/home/harryc/github/CCF_translator/CCF_translator/metadata/deformation_fields/princeton_mouse/princeton_mouse_pull_allen_mouse.nii.gz")

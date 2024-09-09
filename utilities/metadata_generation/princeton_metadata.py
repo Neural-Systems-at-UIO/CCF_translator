@@ -43,10 +43,11 @@ for i in range(len(target_spaces)):
     metadata_template["affine"].append(np.eye(4).tolist())
     if source == "allen_mouse":
         metadata_template["dim_order"].append([0,1,2])
-        metadata_template["dim_flip"].append([False, False, False])
+
+        metadata_template["dim_flip"].append([False, False, True])
     elif target == "allen_mouse":
         metadata_template["dim_order"].append([0,1,2])
-        metadata_template["dim_flip"].append([False, False, False])
+        metadata_template["dim_flip"].append([False, False, True])
 
     metadata_template["key_age"].append(True)
     metadata_template["padding_micron"].append([[0, 0], [0, 0], [0, 0]])
