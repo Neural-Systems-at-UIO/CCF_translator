@@ -109,9 +109,9 @@ def download_deformation_field(url, path):
 
 
 def calculate_offset(original_input_shape, output_shape):
-    x = np.arange(0, original_input_shape[1], original_input_shape[1] / output_shape[1])
-    y = np.arange(0, original_input_shape[2], original_input_shape[2] / output_shape[2])
-    z = np.arange(0, original_input_shape[3], original_input_shape[3] / output_shape[3])
+    x = np.linspace(0, original_input_shape[1], output_shape[1], endpoint=False)
+    y = np.linspace(0, original_input_shape[2], output_shape[2], endpoint=False)
+    z = np.linspace(0, original_input_shape[3], output_shape[3], endpoint=False)
     X, Y, Z = np.meshgrid(x, y, z, indexing="ij")
     original_coordinates = np.stack([X, Y, Z])
     target_coordinates = np.indices(output_shape[1:])

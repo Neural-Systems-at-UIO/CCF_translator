@@ -9,6 +9,22 @@ import numpy as np
 # test_data_dir = os.path.dirname(__file__)
 test_data_dir = r"/home/harryc/github/CCF_translator/tests/test_data/"
 
+princeton_atlas = np.load(os.path.join(test_data_dir, 'volumes', 'princeton_mouse_200um.npz'))
+reference = princeton_atlas['reference']
+annotation = princeton_atlas['annotation']
+volume = CCF_translator.Volume(
+    values = reference,
+    space = 'princeton_mouse',
+    age_PND = 56,
+    voxel_size_micron=200
+)
+volume.transform(
+    target_space='perens_lsfm_mouse',
+    target_age=56
+)
+
+volume.save(test_data_dir + 'perens_lsfm_from_princeton.nii.gz')
+
 allen_atlas = np.load(os.path.join(test_data_dir, 'volumes', 'allen_mouse_200um.npz'))
 reference = allen_atlas['reference']
 annotation = allen_atlas['annotation']
