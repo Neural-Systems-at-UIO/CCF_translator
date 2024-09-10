@@ -49,21 +49,15 @@ target_spaces = ["allen_mouse"]
 original_elastix_volume_paths = [
     f"{root_path}/output_directory/deformationField.nii.gz"
 ]
-
-# its a bit weird transforming from 25µm to 20µm so here i make it 20µm to 20µm
-current_input_size = np.array([320, 528, 456])
-new_input_size = current_input_size * (25 / 20)
-new_input_size = np.round(new_input_size).astype(int)
-
+ 
 for i in range(len(original_elastix_volume_paths)):
     original_elastix_volume_path = original_elastix_volume_paths[i]
     source = source_spaces[i]
     target = target_spaces[i]
     elastix_img = nib.load(original_elastix_volume_path)
     elastix_arr = open_deformation_field(elastix_img).astype(np.float32)
-    copy_arr = elastix_arr.copy()
     elastix_arr = resize_input(
-        elastix_arr, (1, *current_input_size), elastix_arr.shape
+    elastix_arr, (1, *current_input_size), elastix_arr.shape
     )
 
     elastix_arr = elastix_arr[:,:,:,::-1]
@@ -73,17 +67,12 @@ for i in range(len(original_elastix_volume_paths)):
     )
     elastix_arr = np.transpose(elastix_arr, [0,2,1,3])
     elastix_arr = elastix_arr[[1,0,2]]
-
+    
     save_path = f"/home/harryc/github/CCF_translator/CCF_translator/metadata/deformation_fields/{source}/"
     if not os.path.isdir(save_path):
         os.mkdir(save_path)
     save_volume(elastix_arr, f"{save_path}/{source}_pull_{target}.nii.gz")
-    copy_arr = resize_input(
-        copy_arr, (1, *current_input_size), (1, *new_input_size)
-    )
-    copy_arr = np.transpose(copy_arr, [0,2,1,3])
-    copy_arr = copy_arr[[1,0,2]]
-    inverted_arr = invert_deformation(copy_arr, new_input_size[[1,0,2]])
+    inverted_arr = invert_deformation(elastix_arr, new_input_size[[1,0,2]])
     save_path = f"/home/harryc/github/CCF_translator/CCF_translator/metadata/deformation_fields/{target}/"
     if not os.path.isdir(save_path):
         os.mkdir(save_path)

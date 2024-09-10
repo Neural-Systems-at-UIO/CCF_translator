@@ -23,8 +23,8 @@ the name in CCF_translator aims to copy the name of atlases in the brainglobe_at
 | Gubra STPT mouse | perens_stpt_mouse| 56
 | Princeton lighsheet mouse | princeton_mouse| 56
 ## Usage
-**Transforming points**
 
+**Transforming points**
 To take a coordinate in one volume and find the equivalent coordinate in a second volume is quite simple in CCF_translator. 
 ```python
 import numpy as np
@@ -40,6 +40,11 @@ print(f"new points are {pset.values}")
 new points are [[267 250 286] [452 247 414]]
  ```
 **Transforming volumes**
+
+To run the volume examples you will want to install brainglobe-atlasapi using the following
+```
+pip install brainglobe-atlasapi
+```
 
 Transforming a volume is equally simple, here we get the volume from the brainglobe api, but you can load it however you like. In the Demba space the valid ages are from 4 to 56, and all of these are valid targets for transformation. 
 ```python

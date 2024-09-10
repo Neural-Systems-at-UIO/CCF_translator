@@ -28,7 +28,7 @@ volume.save(test_data_dir + 'perens_lsfm_from_princeton.nii.gz')
 allen_atlas = np.load(os.path.join(test_data_dir, 'volumes', 'allen_mouse_200um.npz'))
 reference = allen_atlas['reference']
 annotation = allen_atlas['annotation']
-volume = CCF_translator.volume(
+volume = CCF_translator.Volume(
     values = reference,
     space = 'allen_mouse',
     age_PND = 56,
@@ -41,7 +41,7 @@ volume.transform(
 
 reference_transformed = volume.values
 
-volume = CCF_translator.volume(
+volume = CCF_translator.Volume(
     values = annotation,
     space = 'allen_mouse',
     age_PND = 56,
@@ -63,7 +63,7 @@ np.savez_compressed(os.path.join(test_data_dir,'expected_outputs', 'allen_mouse_
 allen_atlas = np.load(os.path.join(test_data_dir, 'volumes', 'allen_mouse_200um.npz'))
 reference = allen_atlas['reference']
 annotation = allen_atlas['annotation']
-volume = CCF_translator.volume(
+volume = CCF_translator.Volume(
     values = reference,
     space = 'allen_mouse',
     age_PND = 56,
@@ -76,7 +76,7 @@ volume.transform(
 
 reference_transformed = volume.values
 
-volume = CCF_translator.volume(
+volume = CCF_translator.Volume(
     values = annotation,
     space = 'allen_mouse',
     age_PND = 56,
@@ -118,7 +118,7 @@ plt.imshow(reference_transformed[30])
 # allen_atlas = np.load(os.path.join(test_data_dir, 'volumes', 'allen_mouse_200um.npz'))
 # reference = allen_atlas['reference']
 # annotation = allen_atlas['annotation']
-# volume = CCF_translator.volume(
+# volume = CCF_translator.Volume(
 #     values = reference,
 #     space = 'allen_mouse',
 #     age_PND = 56,
@@ -131,7 +131,7 @@ plt.imshow(reference_transformed[30])
 
 # reference_transformed = volume.values
 
-# volume = CCF_translator.volume(
+# volume = CCF_translator.Volume(
 #     values = annotation,
 #     space = 'allen_mouse',
 #     age_PND = 56,
