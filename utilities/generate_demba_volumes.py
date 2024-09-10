@@ -13,7 +13,9 @@ import numpy as np
 
 """
 The following code projects the Allen annotations and template at 10um
-down to the DeMBA ages.  
+down to the DeMBA ages.  If you would like to see how the interpolated 
+DeMBA templates are generated please see the create_series file in the 
+same folder as this script.
 """
 voxel_size_micron = 10
 allen_space_name = r"allen_mouse"
@@ -58,62 +60,6 @@ for end_age in range(t_start_age, youngest_age - 1, -1):
     )
 
 
-"""
-The following code creates the intermediate templates between the ages
-"""
-voxel_size_micron = 20
-space_name = "demba_dev_mouse"
-data_folder = "/mnt/z/HBP_Atlasing/Developmental_atlases/DeMBA_Developmental mouse brain atlas/DeMBA-v1/01_working-environment/01_Data/DeMBA_v1/interpolated_templates/"
-key_ages = [56, 28, 21, 14, 7, 4]
-
-for i in range(len(key_ages) - 1):
-    older_age = key_ages[i]
-    younger_age = key_ages[i + 1]
-    older_img = nib.load(rf"{data_folder}/DeMBA_P{older_age}_brain.nii.gz")
-    older_volume = np.asanyarray(older_img.dataobj)
-    younger_img = nib.load(rf"{data_folder}/DeMBA_P{younger_age}_brain.nii.gz")
-    younger_volume = np.asanyarray(younger_img.dataobj)
-    for age in range(younger_age, older_age + 1):
-        CCFT_young = CCF_translator.Volume(
-            values=younger_volume.copy(),
-            space=space_name,
-            voxel_size_micron=voxel_size_micron,
-            segmentation_file=False,
-            age_PND=younger_age,
-        )
-        CCFT_old = CCF_translator.Volume(
-            values=older_volume.copy(),
-            space=space_name,
-            voxel_size_micron=voxel_size_micron,
-            segmentation_file=False,
-            age_PND=older_age,
-        )
-        if age != older_age:
-            CCFT_young.transform(target_age=age, target_space=space_name)
-        if age != younger_age:
-            CCFT_old.transform(target_age=age, target_space=space_name)
-
-        young_factor = (older_age - age) / (older_age - younger_age)
-        old_factor = 1 - young_factor
-        print(age)
-
-        CCFT_young.values *= young_factor
-        CCFT_old.values *= old_factor
-        new_data = CCFT_young.values + CCFT_old.values
-        print("new_data")
-        print(new_data.max())
-        print(new_data.min())
-        average = (new_data).astype(np.uint8)
-        average_volume = CCF_translator.Volume(
-            values=average,
-            space=space_name,
-            voxel_size_micron=voxel_size_micron,
-            segmentation_file=False,
-            age_PND=age,
-        )
-        outname = f"demo_data/demba_vols/DeMBA_P{age}.nii.gz"
-        print(f"saving as outname {outname}")
-        average_volume.save(outname)
 
 
 import nrrd

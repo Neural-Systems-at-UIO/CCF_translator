@@ -85,3 +85,9 @@ class VolumeSeries:
                     segmentation_file=left_volume_temp.segmentation_file
                 )
                 self.Volumes.append(target_volume)
+    def save(self, output_dir):
+        for V in self.Volumes:
+            if V.segmentation_file:
+                V.save(f"{output_dir}/{V.space}_P{V.age_PND}_segmentation_{V.voxel_size_micron}micron.nii.gz")
+            else:
+                V.save(f"{output_dir}/{V.space}_P{V.age_PND}_{V.voxel_size_micron}micron.nii.gz")

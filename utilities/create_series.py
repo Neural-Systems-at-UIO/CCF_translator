@@ -1,17 +1,17 @@
-import os
-import sys
-sys.path.append(os.path.abspath("/home/harryc/github/CCF_translator/"))
+# these lines are useful if you would like to use a git cloned ccf_translator. 
+# import os
+# import sys
+# sys.path.append(os.path.abspath("/home/harryc/github/CCF_translator/"))
 import nibabel as nib
 from CCF_translator import VolumeSeries, Volume
-from CCF_translator.deformation.route_calculation import find_hamiltonian_path, calculate_route
-import copy
+
 
 
 # Usage example
 VOXEL_SIZE_MICRON = 20
 SPACE_NAME = "demba_dev_mouse"
 DATA_FOLDER = "/mnt/z/HBP_Atlasing/Developmental_atlases/DeMBA_Developmental mouse brain atlas/DeMBA-v1/01_working-environment/01_Data/DeMBA_v1/interpolated_templates/"
-KEY_AGES = [7, 4]
+KEY_AGES = [7, 4] # [56, 28, 21, 14, 7, 4]
 
 volumes = []
 for age in KEY_AGES:
@@ -32,3 +32,4 @@ for age in KEY_AGES:
 
 volume_series = VolumeSeries(volumes)
 volume_series.interpolate_series()
+volume_series.save(output_dir="demo_data/demba_volumes/")
