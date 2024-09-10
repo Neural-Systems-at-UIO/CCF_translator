@@ -6,7 +6,7 @@ import numpy as np
 base_path = os.path.dirname(__file__)
 
 
-class Pointset:
+class PointSet:
     def __init__(self, values, space, voxel_size_micron, age_PND):
         self.values = np.array(values).astype(float)
         self.space = space

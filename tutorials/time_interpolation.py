@@ -13,10 +13,10 @@ CCFT_vols = []
 for age, path in my_data_paths.items():
     data = nib.load(path)
     vol = data.get_fdata()
-    CCFT_vol = CCFT.volume(data=vol, space="CCFv3", voxel_size=20, age_PND=age)
+    CCFT_vol = CCFT.Volume(data=vol, space="CCFv3", voxel_size=20, age_PND=age)
     CCFT_vols.append(CCFT_vol)
 # Once you have a list of CCFT volumes a time series can then be created
-CCFT_TS = CCFT.time_series(CCFT_vols)
+CCFT_TS = CCFT.VolumeSeries(CCFT_vols)
 # You can check which ages are present with the following
 print(CCFT_TS.data_ages)  # -> P4, P7, P31, P56
 # We can then interpolate the missing data using the following line

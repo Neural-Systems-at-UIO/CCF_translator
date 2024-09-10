@@ -1,4 +1,4 @@
 from . import *
-from .pointset import Pointset
-from .time_series import time_series
-from .volume import Volume
+from .PointSet import PointSet
+from .VolumeSeries import VolumeSeries
+from .Volume import Volume

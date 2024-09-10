@@ -27,7 +27,7 @@ kim_atlas = BrainGlobeAtlas(f"{kim_space_name}_{voxel_size_micron}um")
 t_start_age = 56
 for end_age in range(t_start_age, youngest_age - 1, -1):
     print(f"processing age: {end_age}")
-    CCFT_vol = CCF_translator.volume(
+    CCFT_vol = CCF_translator.Volume(
         values=allen_atlas.reference,
         space="allen_mouse",
         voxel_size_micron=voxel_size_micron,
@@ -36,7 +36,7 @@ for end_age in range(t_start_age, youngest_age - 1, -1):
     )
     CCFT_vol.transform(end_age, "demba_dev_mouse")
     CCFT_vol.save(rf"{save_path}/P{end_age}_template_{voxel_size_micron}um.nii.gz")
-    CCFT_vol = CCF_translator.volume(
+    CCFT_vol = CCF_translator.Volume(
         values=allen_atlas.annotation,
         space="allen_mouse",
         voxel_size_micron=voxel_size_micron,
@@ -45,7 +45,7 @@ for end_age in range(t_start_age, youngest_age - 1, -1):
     )
     CCFT_vol.transform(end_age, "demba_dev_mouse")
     CCFT_vol.save(rf"{save_path}/P{end_age}_annotation_{voxel_size_micron}um.nii.gz")
-    CCFT_vol = CCF_translator.volume(
+    CCFT_vol = CCF_translator.Volume(
         values=kim_atlas.annotation,
         space="allen_mouse",
         voxel_size_micron=voxel_size_micron,
@@ -74,14 +74,14 @@ for i in range(len(key_ages) - 1):
     younger_img = nib.load(rf"{data_folder}/DeMBA_P{younger_age}_brain.nii.gz")
     younger_volume = np.asanyarray(younger_img.dataobj)
     for age in range(younger_age, older_age + 1):
-        CCFT_young = CCF_translator.volume(
+        CCFT_young = CCF_translator.Volume(
             values=younger_volume.copy(),
             space=space_name,
             voxel_size_micron=voxel_size_micron,
             segmentation_file=False,
             age_PND=younger_age,
         )
-        CCFT_old = CCF_translator.volume(
+        CCFT_old = CCF_translator.Volume(
             values=older_volume.copy(),
             space=space_name,
             voxel_size_micron=voxel_size_micron,
@@ -104,7 +104,7 @@ for i in range(len(key_ages) - 1):
         print(new_data.max())
         print(new_data.min())
         average = (new_data).astype(np.uint8)
-        average_volume = CCF_translator.volume(
+        average_volume = CCF_translator.Volume(
             values=average,
             space=space_name,
             voxel_size_micron=voxel_size_micron,
@@ -138,7 +138,7 @@ allen_2022_array.shape
 for end_age in range(t_start_age, youngest_age - 1, -1):
     print(f"processing age: {end_age}")
     allen = allen_2022_array.copy()
-    CCFT_vol = CCF_translator.volume(
+    CCFT_vol = CCF_translator.Volume(
         values=allen,
         space="allen_mouse",
         voxel_size_micron=voxel_size_micron,

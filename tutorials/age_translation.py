@@ -11,7 +11,7 @@ volume = image.get_fdata()
 # Create a CCFT object
 # this can be done for either volumes or points
 # for volumes we would run the following
-CCFT_vol = CCFT.volume(
+CCFT_vol = CCFT.Volume(
     values=volume, space="demba_dev_mouse", voxel_size_micron=20, age_PND=28
 )
 # we can then translate either the points or volumes into a new target age or space.
@@ -23,7 +23,7 @@ CCFT_vol.save("demo_data/transform_to_40.nii.gz")
 # alternatively for points we could do this
 with open("my_points.txt") as f:
     points = np.array(f.readlines())
-CCFT_pts = CCFT.pointset(points, space="CCFv3", voxel_size_micron=20, age_PND=28)
+CCFT_pts = CCFT.PointSet(points, space="CCFv3", voxel_size_micron=20, age_PND=28)
 # the API is the same for points
 CCFT_pts.transform(target_age=56)
 

@@ -58,7 +58,7 @@ for m in ["iterative", "individual"]:
             mean_older_points = np.mean(
                 [older_points_ingvild, older_points_heidi], axis=0
             )
-        points = CCF_translator.pointset(
+        points = CCF_translator.PointSet(
             values=mean_older_points,
             space=target_space,
             age_PND=older_age,

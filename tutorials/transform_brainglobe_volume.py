@@ -18,8 +18,8 @@ CCFT_vol = CCF_translator.Volume(
     segmentation_file=False,
     age_PND=source_age,
 )
-CCFT_vol.transform(target_age, "allen_mouse")
-CCFT_vol.save(rf"demo_data/allen_mouse_from_princeton.nii.gz")
+# CCFT_vol.transform(target_age, "allen_mouse")
+# CCFT_vol.save(rf"demo_data/allen_mouse_from_princeton.nii.gz")
 
 CCFT_vol.transform(target_age, "perens_lsfm_mouse")
 CCFT_vol.save(rf"demo_data/perens_lsfm_from_princeton.nii.gz")

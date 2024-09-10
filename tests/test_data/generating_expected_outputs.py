@@ -22,8 +22,23 @@ volume.transform(
     target_space='perens_lsfm_mouse',
     target_age=56
 )
+reference_transformed = volume.values
 
-volume.save(test_data_dir + 'perens_lsfm_from_princeton.nii.gz')
+volume = CCF_translator.Volume(
+    values = annotation,
+    space = 'princeton_mouse',
+    age_PND = 56,
+    voxel_size_micron=200,
+    segmentation_file=True
+)
+volume.transform(
+    target_space='perens_lsfm_mouse',
+      target_age=56
+)
+  
+annotation_transformed = volume.values
+
+np.savez_compressed(os.path.join(test_data_dir,'expected_outputs', 'princeton_mouse_to_perens_lsfm_mouse'), reference=reference_transformed, annotation=annotation_transformed)
 
 allen_atlas = np.load(os.path.join(test_data_dir, 'volumes', 'allen_mouse_200um.npz'))
 reference = allen_atlas['reference']

@@ -1,7 +1,7 @@
 import numpy as np
 import nibabel as nib
 import ast
-import volume
+import CCF_translator.Volume as Volume
 
 
 def save_volume(CCFT_vol, save_path):
@@ -27,7 +27,7 @@ def read_volume(path):
         # Convert the string to a dictionary
         dictionary = ast.literal_eval(string_representation)
         data = np.asanyarray(img.dataobj)
-        CCFT_vol = volume(
+        CCFT_vol = Volume(
             data=data,
             space=dictionary["space"],
             voxel_size_micron=img.affine[0],
