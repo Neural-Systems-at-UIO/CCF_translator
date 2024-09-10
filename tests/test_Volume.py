@@ -1,16 +1,18 @@
+# import os
+# import sys
+# sys.path.append(os.path.abspath("/home/harryc/github/CCF_translator/"))
 
 import unittest
 import numpy as np
 import json
 import os
 from CCF_translator import Volume
-from brainglobe_atlasapi.bg_atlas import BrainGlobeAtlas
 
 
 
 class TestVolume(unittest.TestCase):
     def setUp(self):
-        self.test_case_dir = os.path.join(os.path.dirname(__file__), 'volume_test_cases')
+        self.test_case_dir = os.path.join(os.path.dirname(__file__), 'Volume_test_cases')
 
     def load_test_case(self, filename):
         with open(os.path.join(self.test_case_dir, filename), 'r') as file:

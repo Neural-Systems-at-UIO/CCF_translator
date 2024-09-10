@@ -109,6 +109,55 @@ annotation_transformed = volume.values
 np.savez_compressed(os.path.join(test_data_dir,'expected_outputs', 'allen_mouse_to_demba_dev_mouse_P5'), reference=reference_transformed, annotation=annotation_transformed)
 
 
+############################
+
+demba_p4 = np.load(os.path.join(test_data_dir, 'volumes', 'demba_P4_mouse_200um.npz'))
+demba_p4 = demba_p4['reference']
+volume_p4 = CCF_translator.Volume(
+    values = demba_p4,
+    space = 'demba_dev_mouse',
+    age_PND = 4,
+    voxel_size_micron=200
+)
+demba_p7 = np.load(os.path.join(test_data_dir, 'volumes', 'demba_P7_mouse_200um.npz'))
+demba_p7 = demba_p7['reference']
+volume_p4 = CCF_translator.Volume(
+    values = demba_p7,
+    space = 'demba_dev_mouse',
+    age_PND = 7,
+    voxel_size_micron=200
+)
+
+
+
+
+
+volume.transform(
+    target_space='demba_dev_mouse',
+    target_age=5
+)
+
+reference_transformed = volume.values
+
+volume = CCF_translator.Volume(
+    values = annotation,
+    space = 'allen_mouse',
+    age_PND = 56,
+    voxel_size_micron=200,
+    segmentation_file=True
+)
+volume.transform(
+    target_space='demba_dev_mouse',
+    target_age=5
+)
+
+annotation_transformed = volume.values
+
+
+np.savez_compressed(os.path.join(test_data_dir,'expected_outputs', 'allen_mouse_to_demba_dev_mouse_P5'), reference=reference_transformed, annotation=annotation_transformed)
+
+
+
 
 
 

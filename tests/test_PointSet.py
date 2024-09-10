@@ -8,11 +8,11 @@ import unittest
 import numpy as np
 import json
 import os
-from CCF_translator import Pointset
+from CCF_translator import PointSet
 
 class TestPointset(unittest.TestCase):
     def setUp(self):
-        self.test_case_dir = os.path.join(os.path.dirname(__file__), 'pointset_test_cases')
+        self.test_case_dir = os.path.join(os.path.dirname(__file__), 'PointSet_test_cases')
 
     def load_test_case(self, filename):
         with open(os.path.join(self.test_case_dir, filename), 'r') as file:
@@ -24,7 +24,7 @@ class TestPointset(unittest.TestCase):
         target = test_case['target']
         expected_values = np.array(test_case['expected_values'])
 
-        pset = Pointset(points, 'allen_mouse', voxel_size_micron=25, age_PND=56)
+        pset = PointSet(points, 'allen_mouse', voxel_size_micron=25, age_PND=56)
         pset.transform(target_age=test_case['target_age'], target_space=target)
 
         np.testing.assert_array_almost_equal(pset.values * test_case['scale'], expected_values)

@@ -36,3 +36,22 @@ annotation = zoom(demba_annotation_arr, 0.1, order=0)
 
 np.savez_compressed(os.path.join(test_data_dir,'volumes', 'demba_P5_mouse_200um'), reference=reference, annotation=annotation)
 
+
+demba_reference = r"/home/harryc/github/CCF_translator_local/demo_data/demba_vols/DeMBA_P4.nii.gz"
+demba_reference_arr = nib.load(demba_reference).get_fdata()
+reference = zoom(demba_reference_arr, 0.1)
+
+np.savez_compressed(os.path.join(test_data_dir,'volumes', 'demba_P4_mouse_200um'), reference=reference)
+
+
+demba_reference = r"/home/harryc/github/CCF_translator_local/demo_data/demba_vols/DeMBA_P7.nii.gz"
+demba_reference_arr = nib.load(demba_reference).get_fdata()
+reference = zoom(demba_reference_arr, 0.1)
+
+np.savez_compressed(os.path.join(test_data_dir,'volumes', 'demba_P7_mouse_200um'), reference=reference)
+
+demba_reference = r"/home/harryc/github/CCF_translator_local/demo_data/demba_vols/DeMBA_P14.nii.gz"
+demba_reference_arr = nib.load(demba_reference).get_fdata()
+reference = zoom(demba_reference_arr, 0.1)
+
+np.savez_compressed(os.path.join(test_data_dir,'volumes', 'demba_P14_mouse_200um'), reference=reference)
