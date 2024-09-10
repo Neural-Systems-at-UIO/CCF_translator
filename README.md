@@ -9,7 +9,7 @@ CCF_translator can also interpolate between spaces and create a new intermediate
 ![a graph of all the available spaces and how they are connected. the spaces are nodes with the space name written on top of them, the edges show which spaces are connected to which other spaces.](https://raw.githubusercontent.com/Neural-Systems-at-UIO/CCF_translator/main/media/graph.png)
 ## Use Cases
 One way you can use CCF_translator is to view data from one space, in another space. For instance the allen connectivity dataset shows projections from viral tracing studies in the adult brain. We can take any of these projection datasets and view them in the developing age, for instance post natal day 9.
-![an image which shows a viral tracing study on overlaid on the allen adult ccfv3 template. it shows that same viral tracing data transformed and overlaid on a post natal day 9 template. between the two images is an arrow pointing from the adult to the post natal day 9 brain, above which is text saying CCF_translator, implying that CCF_translator was used to transform the data from adult to post natal day 9.](https://raw.githubusercontent.com/Neural-Systems-at-UIO/CCF_translator/main/media/allen_connectivity_transform.png)
+![an image which shows a viral tracing study overlaid on the allen adult ccfv3 template. it shows that same viral tracing data transformed and overlaid on a post natal day 9 template. between the two images is an arrow pointing from the adult to the post natal day 9 brain, above which is text saying CCF_translator, implying that CCF_translator was used to transform the data from adult to post natal day 9.](https://raw.githubusercontent.com/Neural-Systems-at-UIO/CCF_translator/main/media/allen_connectivity_transform.png)
 ## Installation
 CCF_translator can be installed by running 
 ```
@@ -73,3 +73,6 @@ CCFT_vol.save(rf"demo_data/P{target_age}_template_{voxel_size_micron}um.nii.gz")
 ```
 ## Contributing
 If you would like to add a new space or connect an existing one, please create a deformation matrix and/or describe the required reorientation, flipping, cropping, and padding of the axis between this space and one that already exists in the network, and then open an issue in this repository.  Ideally, choose a space which covers all the areas which are covered in your space. While the Allen CCFv3 is very popular, it is missing the anterior olfactory bulb and the caudal portion of the cerebellum and brain stem, so it is not the optimal choice. 
+
+## Citation
+CCF_translator was first described in [DeMBA: a developmental atlas for navigating the mouse brain in space and time](https://www.biorxiv.org/content/10.1101/2024.06.14.598876v1). If you use CCF_translator, please cite that paper.
