@@ -33,7 +33,7 @@ import numpy as np
 import CCF_translator
 
 points = np.array([(286,250,267), (414,247,452)])
-pset = CCF_translator.Pointset(points, 'demba_dev_mouse', voxel_size_micron=20, age_PND=56)
+pset = CCF_translator.PointSet(points, 'demba_dev_mouse', voxel_size_micron=20, age_PND=56)
 pset.transform(target_age=56, target_space='allen_mouse')
 print(f"new points are {pset.values}")
 
