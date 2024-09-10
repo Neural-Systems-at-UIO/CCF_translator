@@ -89,6 +89,7 @@ fig.text(0.5, 0.55, 'CCF_translator', ha='center', fontsize=12)
 # Add an arrow between the plots
 arrow = patches.FancyArrowPatch((0.45, 0.5), (0.55, 0.5), transform=fig.transFigure,
                                 arrowstyle="->", mutation_scale=20, color='black')
+fig.add_artist(arrow)  # Add the arrow to the figure
 
 # Save the figure as an image file
 fig.savefig('media/allen_connectivity_transform.png', dpi=300, bbox_inches='tight')

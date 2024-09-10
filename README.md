@@ -7,6 +7,9 @@ A longstanding problem in NeuroInformatics has been the inability to easily tran
 CCF_translator can also interpolate between spaces and create a new intermediate space. This is primarily useful for development, where, for instance, the midpoint between day 5 and day 7 can be taken and used as a postnatal day 6 reference. It could also be useful for making references of disease progression.  
 
 ![a graph of all the available spaces and how they are connected. the spaces are nodes with the space name written on top of them, the edges show which spaces are connected to which other spaces.](https://raw.githubusercontent.com/Neural-Systems-at-UIO/CCF_translator/main/media/graph.png)
+## Use Cases
+One way you can use CCF_translator is to view data from one space, in another space. For instance the allen connectivity dataset shows projections from viral tracing studies in the adult brain. We can take any of these projection datasets and view them in the developing age, for instance post natal day 9.
+[an image which shows a viral tracing study on overlaid on the allen adult ccfv3 template. it shows that same viral tracing data transformed and overlaid on a post natal day 9 template. between the two images is an arrow pointing from the adult to the post natal day 9 brain, above which is text saying CCF_translator, implying that CCF_translator was used to transform the data from adult to post natal day 9.](media/allen_connectivity_transform.png)
 ## Installation
 CCF_translator can be installed by running 
 ```
@@ -23,7 +26,6 @@ the name in CCF_translator aims to copy the name of atlases in the brainglobe_at
 | Gubra STPT mouse | perens_stpt_mouse| 56
 | Princeton lighsheet mouse | princeton_mouse| 56
 ## Usage
-
 **Transforming points**
 To take a coordinate in one volume and find the equivalent coordinate in a second volume is quite simple in CCF_translator. 
 ```python
