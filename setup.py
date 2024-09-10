@@ -6,7 +6,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="CCF_translator",
-    version="0.1.15",
+    version="0.2",
     packages=find_packages(),
     license="MIT",
     description="a package to translate data between common coordinate templates",
