@@ -4,6 +4,7 @@ import pandas as pd
 import nibabel as nib
 import copy
 from .Volume import Volume
+from pathlib import Path
 
 base_path = os.path.dirname(__file__)
 
@@ -86,8 +87,10 @@ class VolumeSeries:
                 )
                 self.Volumes.append(target_volume)
     def save(self, output_dir):
+        if not output_dir:
+            raise ValueError("Output directory cannot be an empty string")
+
+        output_path = Path(output_dir)
         for V in self.Volumes:
-            if V.segmentation_file:
-                V.save(f"{output_dir}/{V.space}_P{V.age_PND}_segmentation_{V.voxel_size_micron}micron.nii.gz")
-            else:
-                V.save(f"{output_dir}/{V.space}_P{V.age_PND}_{V.voxel_size_micron}micron.nii.gz")
+            filename = f"{V.space}_P{V.age_PND}_{'segmentation_' if V.segmentation_file else ''}{V.voxel_size_micron}micron.nii.gz"
+            V.save(output_path / filename)

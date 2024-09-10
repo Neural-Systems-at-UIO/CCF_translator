@@ -1,6 +1,10 @@
+import os
+import sys
+sys.path.append(os.path.abspath("/home/harryc/github/CCF_translator/"))
+
 import os 
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
 
 import CCF_translator
 import numpy as np
@@ -121,7 +125,7 @@ volume_p4 = CCF_translator.Volume(
 )
 demba_p7 = np.load(os.path.join(test_data_dir, 'volumes', 'demba_P7_mouse_200um.npz'))
 demba_p7 = demba_p7['reference']
-volume_p4 = CCF_translator.Volume(
+volume_p7 = CCF_translator.Volume(
     values = demba_p7,
     space = 'demba_dev_mouse',
     age_PND = 7,
@@ -129,35 +133,21 @@ volume_p4 = CCF_translator.Volume(
 )
 
 
-
-
-
-volume.transform(
-    target_space='demba_dev_mouse',
-    target_age=5
+demba_p8 = np.load(os.path.join(test_data_dir, 'volumes', 'demba_P8_mouse_200um.npz'))
+demba_p8 = demba_p8['reference']
+volume_p8 = CCF_translator.Volume(
+    values = demba_p8,
+    space = 'demba_dev_mouse',
+    age_PND = 8,
+    voxel_size_micron=200
 )
 
-reference_transformed = volume.values
+series = CCF_translator.VolumeSeries([volume_p7, volume_p4, volume_p8])
+series.interpolate_series()
 
-volume = CCF_translator.Volume(
-    values = annotation,
-    space = 'allen_mouse',
-    age_PND = 56,
-    voxel_size_micron=200,
-    segmentation_file=True
-)
-volume.transform(
-    target_space='demba_dev_mouse',
-    target_age=5
-)
-
-annotation_transformed = volume.values
-
-
-np.savez_compressed(os.path.join(test_data_dir,'expected_outputs', 'allen_mouse_to_demba_dev_mouse_P5'), reference=reference_transformed, annotation=annotation_transformed)
-
-
-
+for volume in series.Volumes:
+    np.savez_compressed(os.path.join(test_data_dir,'expected_outputs', f'demba_dev_mouse_P{volume.age_PND}_interpolated'), reference=volume.values)
+    
 
 
 

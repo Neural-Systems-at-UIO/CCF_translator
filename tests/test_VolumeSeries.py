@@ -11,9 +11,9 @@ from CCF_translator import VolumeSeries, Volume
 class TestVolumeSeries(unittest.TestCase):
     def setUp(self):
         self.test_case_dir = os.path.join(os.path.dirname(__file__), 'VolumeSeries_test_cases')
-        self.voxel_size_micron = 20
+        self.voxel_size_micron = 200
         self.space_name = "demba_dev_mouse"
-        self.data_folder = "/mnt/z/HBP_Atlasing/Developmental_atlases/DeMBA_Developmental mouse brain atlas/DeMBA-v1/01_working-environment/01_Data/DeMBA_v1/interpolated_templates/"
+        self.data_folder = "tests/test_data/volumes"
 
     def load_test_case(self, filename):
         with open(os.path.join(self.test_case_dir, filename), 'r') as file:
@@ -26,9 +26,9 @@ class TestVolumeSeries(unittest.TestCase):
 
         volumes = []
         for age in key_ages:
-            volume_path = os.path.join(self.data_folder, f"DeMBA_P{age}_brain.nii.gz")
+            volume_path = os.path.join(self.data_folder, f"demba_P{age}_mouse_200um.npz")
             try:
-                volume_data = nib.load(volume_path).get_fdata()
+                volume_data = np.load(volume_path)['reference']
             except FileNotFoundError:
                 print(f"File not found: {volume_path}")
                 continue
@@ -43,21 +43,16 @@ class TestVolumeSeries(unittest.TestCase):
 
         volume_series = VolumeSeries(volumes)
         volume_series.interpolate_series()
-        volume_series.save(output_dir="demo_data/demba_volumes/")
-
-        # Compare the output directory with the expected output directory
-        for file_name in os.listdir(expected_output_dir):
-            expected_file_path = os.path.join(expected_output_dir, file_name)
-            output_file_path = os.path.join("demo_data/demba_volumes/", file_name)
-            expected_data = nib.load(expected_file_path).get_fdata()
-            output_data = nib.load(output_file_path).get_fdata()
-            np.testing.assert_array_almost_equal(output_data, expected_data)
+        # Compare the expected outputs
+        for v in volume_series.Volumes:
+            expected_volume_path = os.path.join(expected_output_dir, f"demba_dev_mouse_P{v.age_PND}_interpolated.npz")
+            expected_volume_data = np.load(expected_volume_path)['reference']
+            np.testing.assert_array_almost_equal(v.values, expected_volume_data)
+            
 
 # List of test case filenames
 test_case_files = [
-    'test_case_1.json',
-    'test_case_2.json',
-    'test_case_3.json',
+    'demba_p4_interpolate_to_p8.json'
 ]
 
 # Dynamically create test methods for each test case file

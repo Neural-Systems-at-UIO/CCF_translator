@@ -1,6 +1,4 @@
 # import os
-
-# # os.chdir('../..')
 # import sys
 
 # sys.path.append(os.path.abspath("/home/harryc/github/CCF_translator/"))

@@ -50,7 +50,10 @@ reference = zoom(demba_reference_arr, 0.1)
 
 np.savez_compressed(os.path.join(test_data_dir,'volumes', 'demba_P7_mouse_200um'), reference=reference)
 
-demba_reference = r"/home/harryc/github/CCF_translator_local/demo_data/demba_vols/DeMBA_P14.nii.gz"
+
+demba_reference = r"/home/harryc/github/CCF_translator_local/demo_data/demba_vols/DeMBA_P8.nii.gz"
 demba_reference_arr = nib.load(demba_reference).get_fdata()
 reference = zoom(demba_reference_arr, 0.1)
-np.savez_compressed(os.path.join(test_data_dir,'volumes', 'demba_P14_mouse_200um'), reference=reference)
+
+np.savez_compressed(os.path.join(test_data_dir,'volumes', 'demba_P8_mouse_200um'), reference=reference)
+
