@@ -142,7 +142,7 @@ volume_p8 = CCF_translator.Volume(
     voxel_size_micron=200
 )
 
-series = CCF_translator.VolumeSeries([volume_p7, volume_p4, volume_p8])
+series = CCF_translator.VolumeSeries([volume_p7, volume_p4, ])
 series.interpolate_series()
 
 for volume in series.Volumes:

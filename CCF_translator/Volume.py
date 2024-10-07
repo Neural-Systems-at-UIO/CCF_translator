@@ -37,7 +37,8 @@ class Volume:
         if source == target:
             print("volume is already in that space")
             return
-        route = route_calculation.calculate_route(source, target, self.metadata)
+        G = route_calculation.create_G(self.metadata)
+        route = route_calculation.calculate_route(source, target, G)
         deform_arr, pad_sum, flip_sum, dim_order_sum, final_voxel_size = (
             apply_deformation.combine_route(
                 route, self.voxel_size_micron, base_path, self.metadata
