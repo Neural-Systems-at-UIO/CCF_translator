@@ -1,4 +1,4 @@
-from .deformation.route_calculation import find_hamiltonian_path, calculate_route, find_minimal_subgraph, find_path_through_nodes, create_G
+from .deformation.route_calculation import find_hamiltonian_path, calculate_route,  find_path_through_nodes, create_G
 import os
 import pandas as pd
 import nibabel as nib
@@ -46,16 +46,16 @@ class VolumeSeries:
 
     def interpolate_series(self):
         route = self.calculate_hamiltonian()
-
+        existing_route = [i for i in route if i in [f"{i.space}_P{i.age_PND}" for i in self.Volumes]]
         if not route:
             print("No valid route was found. Exiting.")
             return
 
         filtered_metadata = self.filter_metadata()
 
-        for i in range(len(route) - 1):
-            start = route[i]
-            end = route[i + 1]
+        for i in range(len(existing_route) - 1):
+            start = existing_route[i]
+            end = existing_route[i + 1]
             start_age, start_space = self.split_volume_name(start)
             end_age, end_space = self.split_volume_name(end)
 
