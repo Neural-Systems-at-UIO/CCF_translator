@@ -10,10 +10,10 @@ def extract_age(file_path):
     return int(match.group(1)) if match else float('inf')
 
 paths =[
-    "/home/harryc/github/CCF_translator/demo_data/demba_volumes/*demba_dev_mouse*",
-        "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*allen_2022_annotation*",
-        "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*allen_2017_annotation*",
-        "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*kim_annotation*",
+    # "/home/harryc/github/CCF_translator/demo_data/demba_volumes/*demba_dev_mouse*",
+        # "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*allen_2022_annotation*",
+        # "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*allen_2017_annotation*",
+        # "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*kim_annotation*",
         "/home/harryc/github/demba_analysis/interpolated_gene/*calb1_gene_volume*",
         ]
 
@@ -36,6 +36,7 @@ for path in paths:
         volumes = volumes / np.max(volumes)
         volumes = volumes * 255
         volumes = volumes.astype(np.uint8)
+
     #it seems itk struggles to open such large time series so we instead split it in thirds
     nib.save(nib.Nifti1Image(volumes[:,:,:,:17], img.affine, img.header), f'../demo_data/{name}_P4_to_P20.nii.gz')
     nib.save(nib.Nifti1Image(volumes[:,:,:,17:34], img.affine, img.header), f'../demo_data/{name}_P21_to_P37.nii.gz')
