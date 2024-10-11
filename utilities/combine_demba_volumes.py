@@ -10,10 +10,10 @@ def extract_age(file_path):
     return int(match.group(1)) if match else float('inf')
 
 paths =[
-    # "/home/harryc/github/CCF_translator/demo_data/demba_volumes/*demba_dev_mouse*",
-        # "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*allen_2022_annotation*",
-        # "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*allen_2017_annotation*",
-        # "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*kim_annotation*",
+    "/home/harryc/github/CCF_translator/demo_data/demba_volumes/*demba_dev_mouse*",
+        "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*allen_2022_annotation*",
+        "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*allen_2017_annotation*",
+        "/home/harryc/github/CCF_translator_local/demo_data/demba_20um/*kim_annotation*",
         "/home/harryc/github/demba_analysis/interpolated_gene/*calb1_gene_volume*",
         ]
 
