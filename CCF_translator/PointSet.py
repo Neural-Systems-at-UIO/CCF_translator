@@ -25,7 +25,8 @@ class PointSet:
         row_template = "{}_physical_size_micron"
         source = f"{self.space}_P{self.age_PND}"
         target = f"{target_space}_P{target_age}"
-        route = route_calculation.calculate_route(target, source, self.metadata)
+        G = route_calculation.create_G(self.metadata)
+        route = route_calculation.calculate_route(target, source, G)
         deform_arr, pad_sum, flip_sum, dim_order_sum, final_voxel_size = apply_deformation.combine_route(
             route, self.voxel_size_micron, base_path, self.metadata
         )

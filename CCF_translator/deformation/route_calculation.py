@@ -33,7 +33,6 @@ def find_path_through_nodes(G, nodes):
     
     return full_path
 
-
     
 def find_hamiltonian_path(G):
     def backtrack(path):
