@@ -1,2 +1,0 @@
-These scripts will allow you to replicate the analysis from the DeMBA publication. 
-The analysis relied on CCF_translator and so these scripts should show you how to perform a similar analysis on your own data.
